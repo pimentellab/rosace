@@ -1,0 +1,177 @@
+---
+title: "Introduction to rosace"
+author: "Jingyou Rao"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to rosace}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(tidy = FALSE, cache = FALSE, dev = "png",
+                      message = FALSE, error = FALSE, warning = TRUE)
+```	
+
+## Installation
+
+To install __rosace__ start [R](https://www.r-project.org) and first install devtools by typing
+```{r eval=FALSE}
+install.packages("devtools")
+```
+
+and install __rosace__ by typing
+```{r eval=FALSE}
+devtools::install_github("pimentellab/rosace")
+```
+
+Next load __rosace__ with
+```{r}
+library("rosace")
+```
+
+## Example
+
+#### Read Count Data
+
+To explain how to use __rosace__ we provide an example based on the OCT1 drug cytotoxicity screen (https://www.biorxiv.org/content/10.1101/2023.06.06.543963v1.full). 
+
+The screen has three replicates. The count matrix is stored in "data/oct1.rda".
+
+```{r}
+data("oct1")
+key <- "1SM73"
+type <- "growth"
+```
+
+#### Create Rosace Object
+
+First, load the count file into the Assay object. 
+Each replicate in the experiment will form an Assay object and will share the same "key" (1SM73).
+
+```{r}
+assay1 <- CreateAssayObject(counts = as.matrix(oct1_rep1[2:ncol(oct1_rep1)]),
+                            var.names = oct1_rep1$hgvs,
+                            key = key, rep = 1, type = type)
+assay2 <- CreateAssayObject(counts = as.matrix(oct1_rep2[2:ncol(oct1_rep2)]),
+                            var.names = oct1_rep2$hgvs,
+                            key = key, rep = 2, type = type)
+assay3 <- CreateAssayObject(counts = as.matrix(oct1_rep3[2:ncol(oct1_rep3)]),
+                            var.names = oct1_rep3$hgvs,
+                            key = key, rep = 3, type = type)
+```
+
+Next create Rosace object by adding three Assay objects together.
+
+```{r}
+rosace <- CreateRosaceObject(object = assay1)
+rosace <- AddAssayData(object = rosace, assay = assay2)
+rosace <- AddAssayData(object = rosace, assay = assay3)
+GetAssayName(rosace)
+```
+
+#### Preprocessing
+
+'CreateAssayObject' calls function 'FilterData' to filter the variants with more than 'na.rmax'% of NAs by default. But we might want to filter more variants later.
+
+```{r}
+rosace <- FilterData(rosace, key = key, na.rmax = 0.5)
+```
+
+Then we will impute the NA data either by K-Nearest Neighbor method or fill the NA with 0. 
+
+```{r}
+rosace <- ImputeData(rosace, key = key, impute.method = "knn", na.rmax = 0.5)
+# rosace <- ImputeData(rosace, key = key, impute.method = "zero")
+```
+
+With a complete count matrix in the Assay object, we will normalize the data by either a list of wild-type variants or by the total count at the time point.
+
+```{r}
+rosace <- NormalizeData(rosace, key = key,
+                        normalization.method = "wt", 
+                        wt.var.names = c("_wt"), wt.rm = TRUE)
+# rosace <- NormalizeData(rosace, key = key, normalization.method = "total")
+```
+
+After the Assay objects are all normalized, we can integrate three replicates into an Assays object stored in the "combined.assay" slot of the Rosace object.
+
+```{r}
+rosace <- IntegrateData(object = rosace, key = key)
+GetAssaySetName(rosace)
+```
+
+#### Naive Method: simple linear regression (optional)
+
+```{r}
+rosace <- runSLR(rosace, name = key, type = "AssaySet")
+rosace <- runSLR(rosace, name = paste(key, "1", sep = "_"), type = "Assay")
+# rosace <- runSLR(rosace, name = paste(key, "2", sep = "_"), type = "Assay")
+# rosace <- runSLR(rosace, name = paste(key, "3", sep = "_"), type = "Assay")
+```
+
+#### Process variants' meta data (provide your own function)
+
+Provide your own function for parsing "hgvs" into position, mutation, wildtype, and type of mutation.
+
+```{r}
+library("dplyr")
+colnames(rosace@var.data)
+rosace@var.data <- rosace@var.data %>%
+  mutate(tmp = substr(variants, 4, nchar(variants) - 1),
+         position = as.numeric(gsub("[[:alpha:]]", "", tmp)),
+         wildtype = substr(tmp, 1, 1),
+         tmp = substr(tmp, 2, nchar(tmp)),
+         mutation = gsub("[[:digit:]]", "", tmp)) %>%
+  dplyr::select(-tmp)
+
+func_map <- function(wt, mut) {
+  if (nchar(wt) == 0) {
+    return("NA")
+  }
+  
+  if (wt == mut) {
+    return("synonymous")
+  } else if (mut == "del") {
+    return("deletion")
+  } else {
+    return("missense")
+  }
+}
+
+rosace@var.data <- rosace@var.data %>%
+  rowwise() %>%
+  mutate(type = func_map(wildtype, mutation)) %>%
+  ungroup()
+head(rosace@var.data)
+```
+
+#### Run ROSACE
+
+There are three ways to run ROSACE model:
+1) Provide no position or control column. 
+The model would treat each variant independently but with shrinkage on the variance component.
+2) Provide position column only.
+In addition, the model would group variants together with the amino acid position information provided.
+3) Provide both position and control column (recommended).
+In addition, the model would group all control variants together into one position label.
+
+```{r eval=FALSE}
+rosace <- RunRosace(object = rosace,
+                    name = "1SM73_1",
+                    type = "Assay",
+                    savedir = "../tests/result/stan/", 
+                    pos.col = "position", 
+                    ctrl.col = "type",
+                    ctrl.name = "synonymous")
+
+rosace <- RunRosace(object = rosace,
+                    name = "1SM73",
+                    type = "AssaySet",
+                    savedir = "../tests/result/stan/",
+                    pos.col = "position",
+                    ctrl.col = "type", 
+                    ctrl.name = "synonymous")
+
+```
+

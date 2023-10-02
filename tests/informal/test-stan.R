@@ -1,0 +1,61 @@
+# Load rosace functions
+devtools::load_all(".")
+
+# Load data
+load("data/oct1_rosace.rda")
+
+# small sample test
+rosace@assays$`1SM73_1`@norm.counts <- rosace@assays$`1SM73_1`@norm.counts[1:100, ]
+rosace@assays$`1SM73_1`@norm.var.names <- rosace@assays$`1SM73_1`@norm.var.names[1:100]
+rosace@assay.sets$`1SM73`@raw.counts <- rosace@assay.sets$`1SM73`@raw.counts[1:100, ]
+rosace@assay.sets$`1SM73`@combined.counts <- rosace@assay.sets$`1SM73`@combined.counts[1:100, ]
+rosace@assay.sets$`1SM73`@var.names <- rosace@assay.sets$`1SM73`@var.names[1:100]
+
+# test RunRosace Growth
+# Assay (1 replicate)
+# position model
+rosace <- RunRosace(object = rosace,
+                    name = "1SM73_1",
+                    type = "Assay",
+                    savedir = "tests/results/stan/assay",
+                    pos.col = "position",
+                    ctrl.col = "type",
+                    ctrl.name = "synonymous",
+                    install = FALSE)
+# non-position model
+rosace <- RunRosace(object = rosace,
+                    name = "1SM73_1",
+                    type = "Assay",
+                    savedir = "tests/results/stan/assay_nopos",
+                    install = FALSE)
+
+# AssaySet (multiple replicates)
+# position model
+rosace <- RunRosace(object = rosace,
+                    name = "1SM73",
+                    type = "AssaySet",
+                    savedir = "tests/results/stan/assayset",
+                    pos.col = "position",
+                    ctrl.col = "type",
+                    ctrl.name = "synonymous",
+                    install = FALSE)
+# non-position model
+rosace <- RunRosace(object = rosace,
+                    name = "1SM73",
+                    type = "AssaySet",
+                    savedir = "tests/results/stan/assayset_nopos",
+                    install = FALSE)
+
+# debug_list <- RunRosace(object = rosace,
+#                         name = "1SM73",
+#                         type = "AssaySet",
+#                         savedir = "tests/results/stan/assayset",
+#                         pos.col = "position",
+#                         ctrl.col = "type",
+#                         ctrl.name = "synonymous",
+#                         debug = TRUE,
+#                         install = FALSE)
+
+# save(rosace, file = "tests/testdata/rosace_1SM73_eval.RData")
+
+

@@ -1,0 +1,110 @@
+---
+title: "Introduction to rosette simulation"
+author: "Jingyou Rao"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to rosette simulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("rosace")
+```
+
+## Description
+
+
+## Example
+
+Again, we are using the oct1 dataset as our example. 
+
+### Read Processed Rosace Object
+```{r}
+data("oct1_rosace")
+key <- "1SM73"
+type <- "growth"
+```
+
+### Create Naive Score
+```{r}
+oct1_rosace <- runSLR(oct1_rosace, name = "1SM73_2", type = "Assay")
+```
+
+### Create Rosette Object
+```{r}
+rosette <- CreateRosetteObject(object = oct1_rosace,
+                               score.name = "1SM73_2_SLR",
+                               pos.col = "position", mut.col = "mutation",
+                               ctrl.col = "type", ctrl.name = "synonymous",
+                               project.name = "1SM73_2_SLR")
+```
+
+### Generate Summary Statistics
+
+#### Dispersion
+
+TODO: description
+
+When calling the function "CreateRosetteObject", the dispersion parameters are automatically inferred. 
+```{r}
+rosette@disp
+rosette@disp.start
+```
+
+#### Mutant Group Label
+
+TODO: description
+
+```{r}
+hclust <- HclustMutant(rosette, save.plot = FALSE)
+rosette <- GenMutLabel(rosette, hclust = hclust, Gmut = 4, save.plot = FALSE)
+```
+
+#### Variant Group Label
+
+TODO: description
+
+```{r}
+PlotScoreHist(rosette, var.group = FALSE, mut.group = FALSE)
+rosette <- GenVarLabel(rosette, Gvar = 2)
+PlotScoreHist(rosette, var.group = TRUE, mut.group = TRUE)
+```
+
+#### Weight of variant group within mutant group
+
+TODO: description
+
+```{r}
+rosette <- PMVCountDist(rosette, pos.missing = 0.2)
+```
+
+### Create config for simulation
+
+```{r eval=FALSE}
+cfg <- CreateConfig(rosette,
+                    n.sim = 2, save.sim = "tests/results/sim", type.sim = "growth",
+                    n.rep = 3, n_round = 3,
+                    null.var.group = 'var1', wt.effect = -2,
+                    seq.shrink = 1.2, seq.depth = 100,
+                    lib.shrink = 2,
+                    var.shrink = 1, pos.flag = TRUE,
+                    mode.sim = "clean")
+```
+
+### Run simulation
+
+```{r eval=FALSE}
+runRosette(config = cfg, save.tsv = TRUE, save.rosace = TRUE, save.enrich2 = TRUE)
+```
+
+
+
+
+
+
