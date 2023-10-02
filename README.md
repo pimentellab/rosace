@@ -14,6 +14,11 @@ and install __rosace__ by typing
 devtools::install_github("pimentellab/rosace")
 ```
 
+If downloading from local type
+```{r eval=FALSE}
+devtools::install(".") # change to the directory of rosace
+```
+
 Next load __rosace__ with
 ```{r}
 library("rosace")

@@ -124,7 +124,7 @@ GenerateOutput <- function(object, save.files = TRUE, save.dir) {
   if (save.files) {
     save.dir <- file.path(save.dir, object@project.name)
     if (!dir.exists(save.dir)) {
-      dir.create(save.dir)
+      dir.create(save.dir, recursive = TRUE)
     }
     readr::write_tsv(var.dist, file.path(save.dir, "var_dist.tsv"))
     readr::write_tsv(mut.var.alpha, file.path(save.dir, "mut_var_alpha.tsv"))

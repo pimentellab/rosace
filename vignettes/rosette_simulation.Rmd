@@ -89,7 +89,7 @@ rosette <- PMVCountDist(rosette, pos.missing = 0.2)
 ```{r eval=FALSE}
 cfg <- CreateConfig(rosette,
                     n.sim = 2, save.sim = "tests/results/sim", type.sim = "growth",
-                    n.rep = 3, n_round = 3,
+                    n.rep = 3, n.round = 3,
                     null.var.group = 'var1', wt.effect = -2,
                     seq.shrink = 1.2, seq.depth = 100,
                     lib.shrink = 2,

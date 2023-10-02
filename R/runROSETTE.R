@@ -36,7 +36,7 @@ runRosette <- function(config,
                               "_", config[["sim"]][["mode.sim"]],
                               sep = ""))
   if (!dir.exists(save.dir)) {
-    dir.create(save.dir)
+    dir.create(save.dir, recursive = TRUE)
   }
 
   # start simulation
@@ -50,7 +50,7 @@ runRosette <- function(config,
 
     sub.save.dir <- file.path(save.dir, paste("sim", i, sep = ""))
     if (!dir.exists(sub.save.dir)) {
-      dir.create(sub.save.dir)
+      dir.create(sub.save.dir, recursive = TRUE)
     }
 
     output_tsv(effects_list = effects_list, counts_list = counts_list, save.dir = sub.save.dir)
@@ -521,7 +521,7 @@ output_tsv <- function(effects_list, counts_list, save.dir) {
 
   sub.save.dir <- file.path(save.dir, "tsv")
   if (!dir.exists(sub.save.dir)) {
-    dir.create(sub.save.dir)
+    dir.create(sub.save.dir, recursive = TRUE)
   }
 
   # output effects
@@ -546,7 +546,7 @@ output_rosace <- function(effects_list, counts_list, Nrep, Nround, save.dir) {
   # saving directory
   sub.save.dir <- file.path(save.dir, "rosace")
   if (!dir.exists(sub.save.dir)) {
-    dir.create(sub.save.dir)
+    dir.create(sub.save.dir, recursive = TRUE)
   }
 
   # create rosace object
@@ -584,15 +584,15 @@ output_enrich2 <- function(counts_list, Nrep, Nround, mode.sim, save.dir) {
   # saving directory
   sub.save.dir <- file.path(save.dir, "enrich2")
   if (!dir.exists(sub.save.dir)) {
-    dir.create(sub.save.dir)
+    dir.create(sub.save.dir, recursive = TRUE)
   }
   data.dir <- file.path(sub.save.dir, "data")
   if (!dir.exists(data.dir)) {
-    dir.create(data.dir)
+    dir.create(data.dir, recursive = TRUE)
   }
   result.dir <- file.path(sub.save.dir, "results")
   if (!dir.exists(result.dir)) {
-    dir.create(result.dir)
+    dir.create(result.dir, recursive = TRUE)
   }
 
   # add wild-type info

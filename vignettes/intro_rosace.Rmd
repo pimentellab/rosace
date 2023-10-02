@@ -25,6 +25,11 @@ and install __rosace__ by typing
 devtools::install_github("pimentellab/rosace")
 ```
 
+If downloading from local type
+```{r eval=FALSE}
+devtools::install(".") # change to the directory of rosace
+```
+
 Next load __rosace__ with
 ```{r}
 library("rosace")
@@ -156,19 +161,26 @@ In addition, the model would group variants together with the amino acid positio
 3) Provide both position and control column (recommended).
 In addition, the model would group all control variants together into one position label.
 
-```{r eval=FALSE}
+For the purpose of vignette we shrink down the number of variants to 100 with bruteforce before running ROSACE as running the full dataset might take an hour. 
+
+```{r message=FALSE}
+rosace@assays$`1SM73_1`@norm.counts <- rosace@assays$`1SM73_1`@norm.counts[1:100, ]
+rosace@assays$`1SM73_1`@norm.var.names <- rosace@assays$`1SM73_1`@norm.var.names[1:100]
 rosace <- RunRosace(object = rosace,
                     name = "1SM73_1",
                     type = "Assay",
-                    savedir = "../tests/result/stan/", 
+                    savedir = "../tests/results/stan/assay/", 
                     pos.col = "position", 
                     ctrl.col = "type",
                     ctrl.name = "synonymous")
 
+rosace@assay.sets$`1SM73`@raw.counts <- rosace@assay.sets$`1SM73`@raw.counts[1:100, ]
+rosace@assay.sets$`1SM73`@combined.counts <- rosace@assay.sets$`1SM73`@combined.counts[1:100, ]
+rosace@assay.sets$`1SM73`@var.names <- rosace@assay.sets$`1SM73`@var.names[1:100]
 rosace <- RunRosace(object = rosace,
                     name = "1SM73",
                     type = "AssaySet",
-                    savedir = "../tests/result/stan/",
+                    savedir = "../tests/results/stan/assayset/",
                     pos.col = "position",
                     ctrl.col = "type", 
                     ctrl.name = "synonymous")

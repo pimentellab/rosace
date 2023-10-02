@@ -456,7 +456,7 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
                                   debug = FALSE, install = TRUE, ...) {
   # create directory if not exists
   if (!dir.exists(savedir)) {
-    dir.create(savedir)
+    dir.create(savedir, recursive = TRUE)
   }
 
   # stan check
