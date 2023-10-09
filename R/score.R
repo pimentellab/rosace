@@ -1,4 +1,6 @@
+#' @import dplyr
 #' @importFrom methods setClass new
+#' @importFrom readr write_tsv
 #'
 NULL
 
@@ -12,7 +14,7 @@ NULL
 #' @slot type A character string of the type: Assay, AssaySet
 #' @slot assay.name A character string of the Assay/AssaySet name
 #' @slot score A data frame of the score: 
-#' The first three columns are variants, score, test-statistics.
+#' The first four columns are variants, score, sd, test-statistics.
 #' @slot optional.score A data frame of the optional score 
 #' (row corresponding to score)
 #' @slot misc A list of other information
@@ -25,7 +27,7 @@ Score <- methods::setClass(
     method = 'character', # SLR, ROSACE, ENRICH2
     type = 'character', # AssayGrowth, AssayGrowthSet
     assay.name = "character",
-    score = 'data.frame', # variants, score, test-statistics
+    score = 'data.frame', # variants, score, sd, test-statistics
     optional.score = 'data.frame', 
     misc = 'list' # optional slot
   )
@@ -45,10 +47,6 @@ Score <- methods::setClass(
 ExtractVarNames <- function(score) {
   return(score@score[[1]])
 }
-
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-# Methods for Rosace-defined generics
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #' Create a Score object
 #' 
@@ -94,6 +92,32 @@ CreateScoreObject <- function(
 
   return(score)
 }
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Methods for Rosace-defined generics
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#' @rdname OutputScore
+#' @method OutputScore Score
+#' @export
+OutputScore.Score <- function(object, ...) {
+  CheckDots(...)
+  return(object@score)
+}
+
+#' @param name The targeted name of Score object
+#' @rdname OutputScore
+#' @method OutputScore Rosace
+#' @export
+OutputScore.Rosace <- function(object, name, ...) {
+  CheckDots(...)
+  
+  score <- ExtractScore(object, name)@score
+  var <- ExtractVarScore(object, name)
+
+  return(cbind(var, score[, -1]))
+}
+
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Methods for R-defined generics

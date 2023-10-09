@@ -25,6 +25,26 @@ CreateRosaceObject <- function(object,
   UseMethod(generic = 'CreateRosaceObject', object = object)
 }
 
+########## score.R ##########
+
+#' Output Score data frame
+#' 
+#' If the object is a rosace object, output the meta-information 
+#' of the variants in the data frame as well.
+#'
+#' @param object Either a rosace object or a score object
+#' @param ... Additional arguments passed to OutputScore
+#'
+#' @return A dataframe of score
+#'
+#' @rdname OutputScore
+#' @export
+#'
+OutputScore <- function(object, ...) {
+  UseMethod(generic = 'OutputScore', object = object)
+}
+
+
 ########## preprocessing.R ##########
 
 #' Normalize count (AssayGrowth)

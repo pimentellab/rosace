@@ -18,7 +18,7 @@ The Score Class
 \item{\code{assay.name}}{A character string of the Assay/AssaySet name}
 
 \item{\code{score}}{A data frame of the score:
-The first three columns are variants, score, test-statistics.}
+The first four columns are variants, score, sd, test-statistics.}
 
 \item{\code{optional.score}}{A data frame of the optional score
 (row corresponding to score)}

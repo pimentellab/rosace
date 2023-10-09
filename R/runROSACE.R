@@ -122,9 +122,18 @@ MCMCScoreDf <- function(fit, param.key, param.post, savefile, output.lfsr = TRUE
     param.name <- fit$metadata()$variables
     param.name <- param.name[stringr::str_detect(param.name,
                                                  paste("^", param.key, "\\[", sep = ""))]
+    if (length(param.name) == 0) {
+      param.name <- fit$metadata()$variables
+      param.name <- param.name[stringr::str_detect(param.name, paste("^", param.key, sep = ""))]
+    }
+    if (length(param.name) == 0) {
+      stop("No parameter found. Check the spelling of param.key.")
+    }
+    
     df <-
       fit$summary(param.name, mean, stats::sd,
                   ~stats::quantile(.x, probs = c(0.025, 0.25, 0.5, 0.75, 0.975)))
+    colnames(df)[3] <- "sd"
 
   } else {
     df <- param.post %>%
@@ -139,7 +148,6 @@ MCMCScoreDf <- function(fit, param.key, param.post, savefile, output.lfsr = TRUE
     lfsr <- MCMCLfsr(fit, param.key = param.key)
     df$lfsr <- lfsr
   }
-
 
   if (!missing(savefile)) {
     readr::write_tsv(df, file = savefile)
@@ -194,7 +202,7 @@ GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label
 
   } else {
     # generate variants "map"
-    df_map <- data.frame(variant = object@norm.var.names)
+    df_map <- data.frame(variants = object@norm.var.names)
     
     # generate input list
     input <- list(m = object@norm.counts,
@@ -254,7 +262,7 @@ GenRosaceInput.AssaySetGrowth <- function(object, save.input, pos.label, ctrl.la
                   vMAPm = vMAPm,
                   M = max(vMAPm))
   } else {
-    df_map <- data.frame(variant = object@var.names)
+    df_map <- data.frame(variants = object@var.names)
 
     # generate input list
     input <- list(m = counts,
@@ -280,9 +288,9 @@ MCMCCreateScore.Assay <- function(object, main.score, var.map,
 
   score_all <- cbind(var.map, main.score)
   score <- score_all %>%
-    dplyr::select(.data$variant, .data$mean, .data$lfsr)
+    dplyr::select(.data$variants, .data$mean, .data$sd, .data$lfsr)
   optional.score <- score_all %>%
-    dplyr::select(-.data$variant, -.data$mean, -.data$lfsr)
+    dplyr::select(-.data$variants, -.data$mean, -.data$sd, -.data$lfsr)
 
   misc <- list()
   if (!missing(param.post)) {
@@ -310,8 +318,8 @@ MCMCCreateScore.AssaySet <- function(object, main.score, var.map,
                                      param.post, diags) { # optional, can be missing
 
   score_all <- cbind(var.map, main.score)
-  score <- score_all %>% dplyr::select(.data$variant, .data$mean, .data$lfsr)
-  optional.score <- score_all %>% dplyr::select(-.data$variant, -.data$mean, -.data$lfsr)
+  score <- score_all %>% dplyr::select(.data$variants, .data$mean, .data$sd, .data$lfsr)
+  optional.score <- score_all %>% dplyr::select(-.data$variants, -.data$mean, -.data$sd, -.data$lfsr)
 
   misc <- list()
   if (!missing(param.post)) {
@@ -549,7 +557,7 @@ MCMCLfsr <- function(fit, param.key = "beta") {
 #'
 varPosIndexMap <- function(var.names, pos.label, ctrl.label, thred = 10) {
 
-  df_map <- data.frame(variant = var.names, pos = pos.label)
+  df_map <- data.frame(variants = var.names, pos = pos.label)
   n_pos <- df_map %>%
     dplyr::group_by(.data$pos) %>%
     dplyr::summarise(n_pos =  n()) %>%

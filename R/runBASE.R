@@ -39,13 +39,13 @@ runSLR.AssayGrowth <- function(object, ...) {
   colnames(result) <- c('Estimate', 'Std. Error', 't value', 'Pr(>|t|)')
 
   scores <- data.frame(variant = object@norm.var.names,
-                       result[, c("Estimate", "Pr(>|t|)")],
+                       result[, c("Estimate", "Std. Error", "Pr(>|t|)")],
                        row.names = NULL)
-  colnames(scores) <- c('variant', 'estimate', 'p-value')
+  colnames(scores) <- c('variants', 'estimate', 'std.error', 'p-value')
 
-  optional_scores <- data.frame(result[, c("Std. Error", "t value")],
+  optional_scores <- data.frame(result[, c("t value")],
                                 row.names = NULL)
-  colnames(optional_scores) <- c('std.error', 't-stats')
+  colnames(optional_scores) <- c('t-stats')
 
   score <- CreateScoreObject(method = "SLR",
                              type = "AssayGrowth",
@@ -70,13 +70,13 @@ runSLR.AssaySetGrowth <- function(object, ...) {
   colnames(result) <- c('Estimate', 'Std. Error', 't value', 'Pr(>|t|)')
 
   scores <- data.frame(variant = object@var.names,
-                       result[, c("Estimate", "Pr(>|t|)")],
+                       result[, c("Estimate", "Std. Error", "Pr(>|t|)")],
                        row.names = NULL)
-  colnames(scores) <- c('variant', 'estimate', 'p-value')
+  colnames(scores) <- c('variants', 'estimate', 'std.error', 'p-value')
 
-  optional_scores <- data.frame(result[, c("Std. Error", "t value")],
+  optional_scores <- data.frame(result[, c("t value")],
                                 row.names = NULL)
-  colnames(optional_scores) <- c('std.error', 't-stats')
+  colnames(optional_scores) <- c('t-stats')
 
   # label which replicate(s) the regression is performed on
   cols <- cumsum(unlist(lapply(object@rounds, function(x) x+1)))
