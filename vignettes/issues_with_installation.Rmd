@@ -76,7 +76,8 @@ nano ~/.R/Makevars
 The configuration now tells R to use g++ for compiling C++17 code specifically, using the -std=c++17 standard and -fPIC compiler flags. This should fix the above error and you may initiate *rosace* installation with `devtools::install("rosace")` again.
 
 
-## Installing *impute*
+## Installing *impute* (resolved)
+Note: updated DESCRIPTION, this should no long be an issue
 If you encounter `xx is not available for this version of R`, or `xx is not available for rosace` during the automatic installation, you may try download it manually. For example, the package *impute* is not available on CRAN and can be downloaded using the following: 
 ```{r, eval = FALSE}
 if (!require("BiocManager", quietly = TRUE))
