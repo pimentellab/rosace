@@ -78,5 +78,8 @@ There's a chance for Github download error if running multiple instances on a se
 A object with Rosace result (Score object) if debug = FALSE
 }
 \description{
-Run Rosace on an Assay/AssaySet object
+Rosace operates under the assumption that aligned counts are generated
+by a time-dependent linear function. This function performs inference
+using stan under a Bayesian framework to derive the functional score (regression coefficient),
+error term and parameters phi and sigma.
 }

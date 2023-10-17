@@ -27,5 +27,5 @@ ImputeData(object, impute.method, ...)
 An object with imputed count
 }
 \description{
-Impute raw count data and get imputed count
+Impute the NA data either by K-Nearest Neighbor method or fill the NA with 0.
 }

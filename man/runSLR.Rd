@@ -28,5 +28,7 @@ runSLR(object, ...)
 A Score object with regression result
 }
 \description{
-Do simple linear regression on normalized count  (Growth)
+For each variant, fit a simple linear regression on all replicates across
+different time points. The regression coefficient, standard error, p-value
+and any optional scores are returned as part of a Score object.
 }

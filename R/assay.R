@@ -89,7 +89,9 @@ AssaySetGrowth <- methods::setClass(
 #' Create an Assay object from a raw count matrix.
 #'
 #' Non-unique variant names are not allowed. Please make unique before
-#' calling this function.
+#' calling this function. By default, variants with more than 0.5 missing (NA)
+#' values will be filtered out. You can change the percentage by specifying
+#' `na.rmax` or call `FilterData` after creating the rosace object.
 #'
 #' @param counts Unnormalized data such as raw counts
 #' @param var.names A vector of variant names

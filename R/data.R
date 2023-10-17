@@ -27,4 +27,11 @@ NULL
 #' @keywords datasets
 "oct1_rosace"
 
-
+#' OCT1 drug cytotoxicity screen: effect score computed rosace object
+#' 
+#' @name oct1_rosace_scored
+#' @usage data(oct1_rosace_scored)
+#'
+#' @format A rosace object with three assays (replicates), one assayset, and one score.  
+#' @keywords datasets
+"oct1_rosace_scored"

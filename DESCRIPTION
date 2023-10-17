@@ -16,10 +16,12 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     cmdstanr,
+    colorspace,
     compositions,
     configr,
     dplyr,
     ggplot2,
+    ggpubr,
     grDevices,
     impute,
     MASS,

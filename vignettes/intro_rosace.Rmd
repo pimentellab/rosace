@@ -15,22 +15,28 @@ knitr::opts_chunk$set(tidy = FALSE, cache = FALSE, dev = "png",
 
 ## Installation
 
-To install __rosace__ start [R](https://www.r-project.org) and first install devtools by typing
+To install __rosace__ start [R](https://www.r-project.org) and first install devtools by typing:
+
 ```{r eval=FALSE}
-install.packages("devtools")
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
 ```
 
-and install __rosace__ by typing
+and install __rosace__ by typing:
+
 ```{r eval=FALSE}
 devtools::install_github("pimentellab/rosace")
 ```
 
-If downloading from local type
+If you have cloned the git repository locally, navigate to the __rosace__ folder and type:
+
 ```{r eval=FALSE}
-devtools::install(".") # change to the directory of rosace
+devtools::install(".") 
 ```
 
-Next load __rosace__ with
+Next load __rosace__ with:
+
 ```{r}
 library("rosace")
 ```
@@ -161,9 +167,10 @@ In addition, the model would group variants together with the amino acid positio
 3) Provide both position and control column (recommended).
 In addition, the model would group all control variants together into one position label.
 
-For the purpose of vignette we shrink down the number of variants to 100 with bruteforce before running ROSACE as running the full dataset might take an hour. 
+For the purpose of this vignette, we've reduced the number of variants to 100 with brute force before running ROSACE, since running on the full dataset might take an hour.
 
 ```{r message=FALSE}
+# running on an Assay (one replicate)
 rosace@assays$`1SM73_1`@norm.counts <- rosace@assays$`1SM73_1`@norm.counts[1:100, ]
 rosace@assays$`1SM73_1`@norm.var.names <- rosace@assays$`1SM73_1`@norm.var.names[1:100]
 rosace <- RunRosace(object = rosace,
@@ -172,8 +179,10 @@ rosace <- RunRosace(object = rosace,
                     savedir = "../tests/results/stan/assay/", 
                     pos.col = "position", 
                     ctrl.col = "type",
-                    ctrl.name = "synonymous")
+                    ctrl.name = "synonymous",
+                    install = FALSE)
 
+# running on an AssaySet (all three replicates)
 rosace@assay.sets$`1SM73`@raw.counts <- rosace@assay.sets$`1SM73`@raw.counts[1:100, ]
 rosace@assay.sets$`1SM73`@combined.counts <- rosace@assay.sets$`1SM73`@combined.counts[1:100, ]
 rosace@assay.sets$`1SM73`@var.names <- rosace@assay.sets$`1SM73`@var.names[1:100]
@@ -183,52 +192,9 @@ rosace <- RunRosace(object = rosace,
                     savedir = "../tests/results/stan/assayset/",
                     pos.col = "position",
                     ctrl.col = "type", 
-                    ctrl.name = "synonymous")
-
-# why is it downloading cmdstan each time? CheckStanSetup()??
-```
-
-#### Visualize Results
-
-We provide three options of visualizing the functional score results: heatmap, violin plot, and density plot. A precomputed result on the full dataset is avaliable for demonstration, stored in `../tests/results/stan/assayset_full`. Note: to use the plotting functions, ensure that `scores.data` adheres to the example variants metadata format, with columns including `position`, `wildtype`, `mutation`, `type`, and `score`.
-TO DO: should computed scores be stored in the rosace scores slot?
-```{r}
-# prepare scores dataframe for plotting
-score<-read_tsv(file.path("../tests/results/stan/assayset_full/scores_1SM73.tsv"))$mean
-scores.data <- cbind(rosace@var.data[2:nrow(rosace@var.data),], score)
-
-score<-read_tsv(file.path("../tests/results/stan/assayset/scores_1SM73.tsv"))$mean
-scores.100 <- cbind(rosace@var.data[2:101,], score)
+                    ctrl.name = "synonymous",
+                    install = FALSE)
 ```
 
 
-```{r}
-# plot score heatmap
-scoreHeatmap(data = scores.data, savedir = "../tests/results/stan/assayset_full/plot/", 
-             name = "Heatmap_1SM73", savepdf = TRUE)
-
-scoreHeatmap(data = scores.100, pos.step = 1, x.text = 10 ,y.text = 10, seq.text = 3, 
-             c.scale = list(mid = 0,l1=0.2, l3 = 0.2, p1=0.9, p3 = .4, p4 = 0.9), 
-             savedir = "../tests/results/stan/assayset/plot/", 
-             name = "Heatmap_1SM73_100", savepdf = FALSE, show = TRUE)
-```
-
-
-```{r}
-# plot score violin plot
-scoreVlnplot(data = scores.data, savedir = "../tests/results/stan/assayset_full/plot/", 
-             name = "ViolinPlot_1SM73", savepdf = TRUE, show = FALSE)
-
-scoreVlnplot(data = scores.100, jitter = TRUE, savedir = "../tests/results/stan/assayset/plot/",
-             x.text = 10, y.text = 10, ht = 10, wd = 8, 
-             name = "ViolinPlot_1SM73_100", savepdf = FALSE, show = TRUE)
-```
-
-```{r}
-# plot score density
-scoreDensity(scores.data, hist = TRUE, savedir =
-               "../tests/results/stan/assayset_full/plot/", name = "DensityPlot_1SM73", show = FALSE)
-
-scoreDensity(scores.100, scale.free = TRUE, space.free = TRUE, savedir =
-               "../tests/results/stan/assayset/plot/", name = "DensityPlot_1SM73_100", savepdf = FALSE)
-```
+To visualize the results, refer to the *Visualizing functional score results* vignette.
