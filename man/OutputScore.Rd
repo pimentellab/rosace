@@ -13,7 +13,7 @@ OutputScore(object, ...)
 \method{OutputScore}{Rosace}(object, name, ...)
 }
 \arguments{
-\item{object}{Either a rosace object or a score object}
+\item{object}{Either a Rosace object or a Score object}
 
 \item{...}{Additional arguments passed to OutputScore}
 
@@ -23,6 +23,6 @@ OutputScore(object, ...)
 A dataframe of score
 }
 \description{
-If the object is a rosace object, output the meta-information
+If the object is a Rosace object, output the meta-information
 of the variants in the data frame as well.
 }

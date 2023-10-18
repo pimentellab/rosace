@@ -27,5 +27,10 @@ FilterData(object, ...)
 An object with filtered count
 }
 \description{
-Filter out variants in raw count data
+Normalize the data by either a list of wild-type variants
+or by the total count at the time point.
+}
+\details{
+If normalizing by wild-type variants, the wild-type
+variant names must be specified using \code{wt.var.names}
 }

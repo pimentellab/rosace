@@ -37,5 +37,7 @@ The expected format of the input matrix is variants x time points.
 }
 \details{
 Non-unique variant names are not allowed. Please make unique before
-calling this function.
+calling this function. By default, variants with more than 0.5 missing (NA)
+values will be filtered out. You can change the percentage by specifying
+\code{na.rmax} or call \code{FilterData} after creating the rosace object.
 }

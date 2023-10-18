@@ -16,10 +16,12 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     cmdstanr,
+    colorspace,
     compositions,
     configr,
     dplyr,
     ggplot2,
+    ggpubr,
     grDevices,
     impute,
     MASS,
@@ -33,6 +35,7 @@ Imports:
     stringr,
     tidyr,
     utils
+Remotes: bioc::release/impute
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)

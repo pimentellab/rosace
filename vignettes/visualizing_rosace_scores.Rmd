@@ -1,0 +1,89 @@
+---
+title: "Visualizing functional score results"
+author: "Riley Xin"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Visualizing functional score results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(tidy = FALSE, cache = FALSE, 
+                      dev = "png", dpi=300, fig.align="center", out.width = "100%",
+                      fig.width=6, fig.height = 4,
+                      message = FALSE, error = FALSE, warning = TRUE)
+```	
+
+In this tutorial, we will introduce different ways of visualizing functional score results generated from __rosace__. To see how to run __rosace__, please refer to *Introduction to rosace*. Visualization is a powerful tool for interpreting your results, and we offer three different views: heatmap, violin plot, and density plot.
+
+```{r}
+library("rosace")
+```
+
+## Prepare Data
+
+A precomputed result on the full OCT1 dataset is provided for demonstration purposes. You can load it using:
+
+```{r}
+data("oct1_rosace_scored")
+```
+
+Extract the functional score data for plotting with the `OutputScore` function. This will prepare the data in a format suitable for our visualization functions:
+
+```{r}
+scores.data <- OutputScore(oct1_rosace_scored, name = "1SM73_ROSACE")
+head(scores.data)
+```
+> *Note:* When using your own scores.data, ensure that it contains columns for position, control amino acid, mutated amino acid, mutation type, and score. If your column names differ from the default ones, specify the correct names using the respective arguments: `pos.col`, `wt.col`, `mut.col`, `type.col`, and `score.col`.
+
+## Heatmap
+
+The heatmap provides a grid view of scores, allowing you to quickly identify regions of interest. 
+
+```{r fig.align = 'center'}
+scoreHeatmap(data = scores.data,
+             ctrl.name = 'synonymous', # the control mutation name
+             score.col = "mean",
+             savedir = "../tests/results/stan/assayset_full/plot/", 
+             name = "Heatmap_1SM73",
+             savepdf = TRUE,
+             show = TRUE)
+```
+
+## Violin Plot
+
+The violin plot can be used to visualize the distribution of the scores across different mutation types.
+
+```{r fig.align = 'center'}
+scoreVlnplot(data = scores.data, 
+             savedir = "../tests/results/stan/assayset_full/plot/",
+             name = "ViolinPlot_1SM73", 
+             savepdf = TRUE, 
+             show = TRUE)
+```
+
+## Density Plot
+
+The density plot offers a smoothed representation of the distribution of scores across different
+mutation types.
+
+```{r fig.align = 'center'}
+scoreDensity(scores.data, 
+             hist = FALSE,
+             savedir = "../tests/results/stan/assayset_full/plot/", 
+             name = "DensityPlot_1SM73")
+```
+
+Alternatively, you can plot a histogram by setting `hist = TRUE`.
+
+```{r fig.align = 'center'}
+scoreDensity(scores.data,
+             hist = TRUE,
+             nbins = 50,
+             scale.free = TRUE,
+             savedir = "../tests/results/stan/assayset_full/plot/",
+             name = "Histogram_1SM73")
+```
+
+

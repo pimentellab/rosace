@@ -78,5 +78,23 @@ There's a chance for Github download error if running multiple instances on a se
 A object with Rosace result (Score object) if debug = FALSE
 }
 \description{
-Run Rosace on an Assay/AssaySet object
+Rosace operates under the assumption that aligned counts are generated
+by a time-dependent linear function. This function performs inference
+using stan under a Bayesian framework to derive the functional score
+(regression coefficient), error term and parameters phi and sigma.
+}
+\details{
+There are three ways to run the model. If no meta-info of the variant is
+given, the model treats variant independently. If position info is given,
+the model will have a position hierarchical layer (grouping variants
+of the same position together). If an additional control (synonymous) label
+is given, the model will group the control variants together into one
+position index.
+
+The debug option will return a list of cmdstanfit object and the final
+Score object. Users familiar with stan could extract more diagnostics
+and sampling details from the cmdstanfit object. If a high percentage of
+divergent transitions exist during sampling, users could debug with this
+option. However, users not familiar with HMC or stan are recommended to
+report the error either on GitHub or send an email to the team.
 }
