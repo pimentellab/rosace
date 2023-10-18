@@ -28,8 +28,8 @@ CreateRosaceObject <- function(object,
 ########## score.R ##########
 
 #' Output Score data frame
-#' 
-#' If the object is a Rosace object, output the meta-information 
+#'
+#' If the object is a Rosace object, output the meta-information
 #' of the variants in the data frame as well.
 #'
 #' @param object Either a Rosace object or a Score object
@@ -66,11 +66,11 @@ NormalizeData <- function(object, normalization.method, ...) {
 }
 
 #' Filter out variants in raw count data
-#' 
-#' Normalize the data by either a list of wild-type variants 
+#'
+#' Normalize the data by either a list of wild-type variants
 #' or by the total count at the time point.
-#' 
-#' If normalizing by wild-type variants, the wild-type 
+#'
+#' If normalizing by wild-type variants, the wild-type
 #' variant names must be specified using `wt.var.names`
 #'
 #' @param object An object: AssayGrowth (na.rm), or Rosace
@@ -86,7 +86,7 @@ FilterData <- function(object, ...) {
 }
 
 #' Impute raw count data and get imputed count
-#' 
+#'
 #' Impute the NA data either by K-Nearest Neighbor method or fill the NA with 0.
 #'
 #' @param object An object: matrix (AssayGrowth), AssayGrowth, or Rosace
@@ -118,8 +118,8 @@ IntegrateData <- function(object, ...) {
 
 ########## runBASE.R ##########
 #' Do simple linear regression on normalized count  (Growth)
-#' 
-#' For each variant, fit a simple linear regression on all replicates across 
+#'
+#' For each variant, fit a simple linear regression on all replicates across
 #' different time points. The regression coefficient, standard error, p-value
 #' and any optional scores are returned as part of a Score object.
 #'
@@ -169,14 +169,27 @@ MCMCCreateScore <- function(object, main.score, var.map, param.post, diags) {
   UseMethod(generic = 'MCMCCreateScore', object = object)
 }
 
-# TODO: Build DEBUG Option
 #' Run Rosace on an Assay/AssaySet object
-#' 
-#' Rosace operates under the assumption that aligned counts are generated 
-#' by a time-dependent linear function. This function performs inference 
-#' using stan under a Bayesian framework to derive the functional score (regression coefficient),
-#' error term and parameters phi and sigma. 
-#' 
+#'
+#' Rosace operates under the assumption that aligned counts are generated
+#' by a time-dependent linear function. This function performs inference
+#' using stan under a Bayesian framework to derive the functional score
+#' (regression coefficient), error term and parameters phi and sigma.
+#'
+#' There are three ways to run the model. If no meta-info of the variant is
+#' given, the model treats variant independently. If position info is given,
+#' the model will have a position hierarchical layer (grouping variants
+#' of the same position together). If an additional control (synonymous) label
+#' is given, the model will group the control variants together into one
+#' position index.
+#'
+#' The debug option will return a list of cmdstanfit object and the final
+#' Score object. Users familiar with stan could extract more diagnostics
+#' and sampling details from the cmdstanfit object. If a high percentage of
+#' divergent transitions exist during sampling, users could debug with this
+#' option. However, users not familiar with HMC or stan are recommended to
+#' report the error either on GitHub or send an email to the team.
+#'
 #' @param object Rosace, Assay/AssaySet (default)
 #' @param savedir directory to save the output
 #' @param mc.cores integer, number of cores to use for parallel computing
