@@ -22,7 +22,7 @@ title: Rosace
 email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
   blablabla description.
-baseurl: "/riley"
+baseurl: "/rosace"
 github_user: pimentellab
 github_repo: rosace
 # Build settings
