@@ -135,9 +135,9 @@ scoreHeatmap <- function(data,
     dir.create(savedir, recursive = TRUE)
   }
   
-  ggsave(file.path(paste0(savedir,name,".png")), plot = p_all, height = ht, width = wd)
+  ggsave(file.path(savedir, paste0(name,".png")), plot = p_all, height = ht, width = wd)
   if (savepdf) {
-    ggsave(file.path(paste0(savedir,name,".pdf")), plot = p_all, height = ht, width = wd)
+    ggsave(file.path(savedir, paste0(name,".pdf")), plot = p_all, height = ht, width = wd)
   } 
   
   if (show) {
@@ -262,9 +262,9 @@ scoreVlnplot <- function(data,
     dir.create(savedir, recursive = TRUE)
   }
   
-  ggsave(file.path(paste0(savedir,name,".png")), plot = p_all, height = ht, width = wd)
+  ggsave(file.path(savedir, paste0(name,".png")), plot = p_all, height = ht, width = wd)
   if (savepdf) {
-    ggsave(file.path(paste0(savedir,name,".pdf")), plot = p_all, height = ht, width = wd)
+    ggsave(file.path(savedir, paste0(name,".pdf")), plot = p_all, height = ht, width = wd)
   } 
   
   if (show) {
@@ -367,9 +367,9 @@ scoreDensity <- function(data,
     dir.create(savedir, recursive = TRUE)
   }
   
-  ggsave(file.path(paste0(savedir,name,".png")), plot = p, height = ht, width = wd)
+  ggsave(file.path(savedir, paste0(name,".png")), plot = p, height = ht, width = wd)
   if (savepdf) {
-    ggsave(file.path(paste0(savedir,name,".pdf")), plot = p, height = ht, width = wd)
+    ggsave(file.path(savedir, paste0(name,".pdf")), plot = p, height = ht, width = wd)
   } 
   
   if (show) {
