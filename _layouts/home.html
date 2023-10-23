@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<div class="home">
+  {%- if page.title -%}
+    <h1 class="page-heading">{{ page.title }}</h1>
+  {%- endif -%}
+
+  {{ content }}
+
+  <div class="centered-content">
+    <a href="{{ site.baseurl }}/about/"> 
+      <img src="{{ site.baseurl }}/assets/rosace_logo.png" alt="Description of Image" class="centered-image">
+    </a>
+    <p class="centered-text"> A Robust Deep Mutational Scanning Analysis Framework</p>
+  </div>
+
+</div>
