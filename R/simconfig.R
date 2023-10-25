@@ -1,5 +1,6 @@
 #' @importFrom readr read_tsv
-#' @importFrom configr write.config read.config
+#' @importFrom jsonlite fromJSON
+#' @importFrom rjson toJSON
 #'
 NULL
 
@@ -18,9 +19,8 @@ NULL
 #' @export
 #'
 WriteConfig <- function(cfg, file, savedir) {
-  configr::write.config(config.dat = cfg,
-                        file.path = file.path(savedir, file),
-                        write.type = "json")
+  jsonData <- rjson::toJSON(cfg, indent = 2)
+  write(jsonData, file = paste0(file.path(savedir, file),".json"))
 }
 
 #' Read a full config file
@@ -34,7 +34,7 @@ WriteConfig <- function(cfg, file, savedir) {
 #' @export
 #'
 ReadFullConfig <- function(file) {
-  cfg <- configr::read.config(file = file)
+  cfg <- jsonlite::fromJSON(file)
   return(cfg)
 }
 
@@ -49,7 +49,7 @@ ReadFullConfig <- function(file) {
 #' @export
 #'
 ReadPathConfig <- function(file) {
-  cfg <- configr::read.config(file = file)
+  cfg <- jsonlite::fromJSON(file)
   effect <- cfg$effect
   cfg$effect <-
     listEffectConfig(null.var.group = effect$null.var.group,
