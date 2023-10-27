@@ -11,7 +11,7 @@ scoreDensity(
   score.col = "mean",
   hist = FALSE,
   nbins = 30,
-  c.fill = c("#FF7575", "lightgreen", "#7298BF"),
+  c.fill = c("#FF7575", "lightgreen", "#7298BF", "#E0B0FF", "#FFDAB9", "#40E0D0"),
   alpha = 0.5,
   x.text = 10,
   y.text = 10,
