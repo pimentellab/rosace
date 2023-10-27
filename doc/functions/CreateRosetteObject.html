@@ -1,0 +1,122 @@
+<!DOCTYPE html><html><head><title>R: Create a Rosette object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>CreateRosetteObject</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create a Rosette object</h2>
+
+<h3>Description</h3>
+
+<p>Create a Rosette object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>CreateRosetteObject(object, project.name, ...)
+
+## S3 method for class 'Rosace'
+CreateRosetteObject(
+  object,
+  project.name,
+  score.name,
+  pos.col,
+  mut.col,
+  ctrl.col,
+  ctrl.name,
+  ...
+)
+
+## S3 method for class 'Score'
+CreateRosetteObject(
+  object,
+  project.name,
+  pos.label,
+  mut.label,
+  ctrl.label,
+  disp,
+  disp.start,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>object</code></td>
+<td>
+<p>An object: numeric, Score, or Rosace</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>project.name</code></td>
+<td>
+<p>Name of the Rosette object</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to the creation method.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>score.name</code></td>
+<td>
+<p>A character string indicating the name of the score</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pos.col</code></td>
+<td>
+<p>A character string indicating the name of the position column in var.data</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>mut.col</code></td>
+<td>
+<p>A character string indicating the name of the mutant column in var.data</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.col</code></td>
+<td>
+<p>A character string indicating the name of the control column in var.data</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.name</code></td>
+<td>
+<p>A character string indicating the label of the control in the control column</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pos.label</code></td>
+<td>
+<p>A vector of position labels</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>mut.label</code></td>
+<td>
+<p>A vector of mutant labels</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.label</code></td>
+<td>
+<p>A vector of control labels (boolean: ctrl or not)</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>disp</code></td>
+<td>
+<p>Dispersion of raw count</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>disp.start</code></td>
+<td>
+<p>Dispersion of variant library</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A Rosette object
+</p>
+
+
+</div>
+</body></html>

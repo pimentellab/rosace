@@ -1,0 +1,62 @@
+<!DOCTYPE html><html><head><title>R: Map each variant to its position label (index)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>varPosIndexMap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Map each variant to its position label (index)</h2>
+
+<h3>Description</h3>
+
+<p>Threshold is tricky to choose.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>varPosIndexMap(var.names, pos.label, ctrl.label, thred = 10)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>var.names</code></td>
+<td>
+<p>character vector of variant names</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pos.label</code></td>
+<td>
+<p>character or numeric vector of true positions</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.label</code></td>
+<td>
+<p>vector of whether variant is control</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>thred</code></td>
+<td>
+<p>integer, threshold for number of variants per position label (index)</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>data.frame with columns 'variant', 'pos', 'index'
+</p>
+
+
+</div>
+</body></html>

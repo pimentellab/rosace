@@ -10,11 +10,11 @@ It effectively controls for the false discovering rate in DMS experiments with s
 
 **Rosace** is developed and maintained by the [Pimentel lab](https://pimentellab.com/). Details about the program can be found in our [preprint]({{ site.baseurl }}/404.html):
 
-xxx paper details
+- xxx paper details
 
 **Rosace** is avaliable as a an R package. To get started, [download the software]({{ site.baseurl }}/download/) and explore the [vignettes page]({{ site.baseurl }}/vignettes/) for guidance on its usage.
 
 <div class="notes">
-Note: note what kind of experimental design Rosace currently supports?
+Note: additional notes
 </div>
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html><html><head><title>R: The Rosette Class</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>Rosette-class</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>The Rosette Class</h2>
+
+<h3>Description</h3>
+
+<p>A Rosette object is a container for inferring summary statistics from a
+AssayGrowth of a Rosace experiment.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>score.df</code></dt><dd><p>A data.frame with columns score, pos, mut, ctrl, (var_group),
+(mut_group)</p>
+</dd>
+<dt><code>mut.label</code></dt><dd><p>A data.frame with columns mut, mut_group</p>
+</dd>
+<dt><code>var.dist</code></dt><dd><p>A data.frame with columns var_group, mean, sd, count</p>
+</dd>
+<dt><code>mut.var.alpha</code></dt><dd><p>A data.frame with columns mut_group, var_group, alpha,
+count</p>
+</dd>
+<dt><code>disp</code></dt><dd><p>Dispersion of raw count (sequencing step)</p>
+</dd>
+<dt><code>disp.start</code></dt><dd><p>Dispersion of starting variant library</p>
+</dd>
+<dt><code>Gvar</code></dt><dd><p>Number of variant groups</p>
+</dd>
+<dt><code>Gmut</code></dt><dd><p>Number of mutant groups</p>
+</dd>
+<dt><code>rounds</code></dt><dd><p>Number of rounds</p>
+</dd>
+<dt><code>project.name</code></dt><dd><p>A character string indicating the name of the project</p>
+</dd>
+</dl>
+
+
+</div>
+</body></html>

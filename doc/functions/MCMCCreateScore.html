@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><title>R: Create score object from MCMC result</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>MCMCCreateScore</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create score object from MCMC result</h2>
+
+<h3>Description</h3>
+
+<p>Create score object from MCMC result
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>MCMCCreateScore(object, main.score, var.map, param.post, diags)
+
+## S3 method for class 'Assay'
+MCMCCreateScore(object, main.score, var.map, param.post, diags)
+
+## S3 method for class 'AssaySet'
+MCMCCreateScore(object, main.score, var.map, param.post, diags)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>object</code></td>
+<td>
+<p>Assay or AssaySet</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>main.score</code></td>
+<td>
+<p>functional score</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>var.map</code></td>
+<td>
+<p>variant map</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>param.post</code></td>
+<td>
+<p>(optional) posterior of parameters other than &quot;functional score&quot;</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>diags</code></td>
+<td>
+<p>(optional) diagnostics of MCMC</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A Score object
+</p>
+
+
+</div>
+</body></html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html><html><head><title>R: Integrate Assay into Assays</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>IntegrateData</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Integrate Assay into Assays</h2>
+
+<h3>Description</h3>
+
+<p>Integrate Assay into Assays
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>IntegrateData(object, ...)
+
+## S3 method for class 'Assay'
+IntegrateData(object, assay, ...)
+
+## S3 method for class 'AssaySet'
+IntegrateData(object, assay, ...)
+
+## S3 method for class 'Rosace'
+IntegrateData(object, key, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>object</code></td>
+<td>
+<p>An object: Assay, AssaySet, or Rosace</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to the integration method.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>assay</code></td>
+<td>
+<p>An object from class 'Assay'</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>key</code></td>
+<td>
+<p>The key for the experiment in the AssaySet object</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An object with integrated count (AssaySet)
+</p>
+
+
+</div>
+</body></html>

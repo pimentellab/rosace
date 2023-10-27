@@ -1,0 +1,146 @@
+<!DOCTYPE html><html><head><title>R: Create the config list for simulation from a Rosette object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>CreateConfig</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create the config list for simulation from a Rosette object</h2>
+
+<h3>Description</h3>
+
+<p>Create the config list for simulation from a Rosette object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>CreateConfig(
+  object,
+  n.sim,
+  save.sim,
+  type.sim,
+  n.rep,
+  null.var.group,
+  wt.effect,
+  n.round,
+  n.mut,
+  n.pos,
+  pop.size,
+  mode.sim = "clean",
+  mode.rep = "bio",
+  seq.shrink = 2,
+  seq.depth = 200,
+  lib.shrink = 2,
+  var.shrink = 0.8,
+  pos.flag = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>object</code></td>
+<td>
+<p>A Rosette object</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>n.sim</code></td>
+<td>
+<p>Number of simulations</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>save.sim</code></td>
+<td>
+<p>Directory to save the simulation data</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>type.sim</code></td>
+<td>
+<p>Type of simulation: growth or binding</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>n.rep</code></td>
+<td>
+<p>Number of replicates</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>null.var.group</code></td>
+<td>
+<p>Name of the null variant group</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>wt.effect</code></td>
+<td>
+<p>Wild-type effect (binding) or doubling rate (growth)</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>n.round</code></td>
+<td>
+<p>Number of rounds</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>n.mut</code></td>
+<td>
+<p>Number of mutants (currently has to be the same as in the Rosette object)
+optional, can be inferred from the Rosette object.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>n.pos</code></td>
+<td>
+<p>Number of positions
+optional, can be inferred from the Rosette object.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pop.size</code></td>
+<td>
+<p>Cell population size
+optional, by default 1000 cells per variant.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>mode.sim</code></td>
+<td>
+<p>Simulation mode: &quot;clean&quot; (default) or &quot;reperror&quot;</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>mode.rep</code></td>
+<td>
+<p>Replicate mode: &quot;bio&quot; (default) or &quot;tech&quot;</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>seq.shrink</code></td>
+<td>
+<p>Shrinkage factor for sequencing dispersion (times seq.disp)</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>seq.depth</code></td>
+<td>
+<p>Sequencing depth, by default 200</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>lib.shrink</code></td>
+<td>
+<p>Shrinkage factor for library dispersion</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>var.shrink</code></td>
+<td>
+<p>Shrinkage factor for variance (var.dist)</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pos.flag</code></td>
+<td>
+<p>whether the simulation is position-centric</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Other parameters for noise.
+Reperror: noise.freq, noise.mult</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A list of config
+</p>
+
+
+</div>
+</body></html>

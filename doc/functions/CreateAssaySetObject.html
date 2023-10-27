@@ -1,0 +1,91 @@
+<!DOCTYPE html><html><head><title>R: Create an AssaySet object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>CreateAssaySetObject</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create an AssaySet object</h2>
+
+<h3>Description</h3>
+
+<p>Create an AssaySet object
+</p>
+<p>Create an AssaySetGrowth object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>CreateAssaySetObject(combined.counts, var.names, reps, key, type, ...)
+
+CreateAssaySetGrowthObject(
+  combined.counts,
+  var.names,
+  reps,
+  key,
+  raw.counts,
+  rounds
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>combined.counts</code></td>
+<td>
+<p>A matrix of counts (variants x time points in all reps)</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>var.names</code></td>
+<td>
+<p>A vector of variant names</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>reps</code></td>
+<td>
+<p>A vector of replicate identity</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>key</code></td>
+<td>
+<p>A character string for the experiment</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>type</code></td>
+<td>
+<p>Type of experiment: growth</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Additional arguments for create AssaySet object</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>raw.counts</code></td>
+<td>
+<p>raw.counts A matrix of raw counts (variants x cols in reps)</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>rounds</code></td>
+<td>
+<p>A vector of number of rounds</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An AssaySet object
+</p>
+<p>An AssaySetGrowth object
+</p>
+
+
+</div>
+</body></html>

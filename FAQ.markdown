@@ -4,5 +4,7 @@ title: FAQ
 permalink: /faq/
 order: 3
 ---
-FAQ, a list of Qs and As
+- How to ask a question?
+    - **GitHub Issue:** You can submit a bug report or ask a question by creating a [new issue](https://github.com/{{ site.github_user }}/{{ site.github_repo }}/issues).
+    - **Email:** Alternatively, you can send your questions directly to [roserao@ucla.edu](mailto:{{ site.email }}).
 

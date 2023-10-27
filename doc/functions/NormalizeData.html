@@ -1,0 +1,80 @@
+<!DOCTYPE html><html><head><title>R: Normalize count (AssayGrowth)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>NormalizeData</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Normalize count (AssayGrowth)</h2>
+
+<h3>Description</h3>
+
+<p>Normalize (filtered and imputed) count data (in Assay)
+and get normalized count
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>NormalizeData(object, normalization.method, ...)
+
+## S3 method for class 'matrix'
+NormalizeData(object, normalization.method, var.names, ...)
+
+## S3 method for class 'AssayGrowth'
+NormalizeData(object, normalization.method, ...)
+
+## S3 method for class 'Rosace'
+NormalizeData(object, normalization.method, name, key, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>object</code></td>
+<td>
+<p>An object: matrix, AssayGrowth, or Rosace</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>normalization.method</code></td>
+<td>
+<p>The normalization method to use: &quot;wt&quot; or &quot;total&quot;</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to the normalization method.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>var.names</code></td>
+<td>
+<p>a vector of variant names to be normalized</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>name</code></td>
+<td>
+<p>character string of AssayGrowth name</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>key</code></td>
+<td>
+<p>key of AssayGrowth</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An object with normalized count
+</p>
+
+
+</div>
+</body></html>

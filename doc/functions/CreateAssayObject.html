@@ -1,0 +1,90 @@
+<!DOCTYPE html><html><head><title>R: Create an Assay object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>CreateAssayObject</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create an Assay object</h2>
+
+<h3>Description</h3>
+
+<p>Create an Assay object from a raw count matrix.
+</p>
+<p>The expected format of the input matrix is variants x time points.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>CreateAssayObject(counts, var.names, key, rep, type, ...)
+
+CreateAssayGrowthObject(counts, var.names, key, rep, na.rmax = 0.5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>counts</code></td>
+<td>
+<p>Unnormalized data such as raw counts</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>var.names</code></td>
+<td>
+<p>A vector of variant names</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>key</code></td>
+<td>
+<p>A character string for the experiment</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>rep</code></td>
+<td>
+<p>Identity of the replicate</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>type</code></td>
+<td>
+<p>Type of experiment: growth</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Additional arguments for create assay object.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>na.rmax</code></td>
+<td>
+<p>Maximum ratio of NA values allowed for a variant
+to be included in the assay (AssayGrowth)</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Non-unique variant names are not allowed. Please make unique before
+calling this function. By default, variants with more than 0.5 missing (NA)
+values will be filtered out. You can change the percentage by specifying
+<code>na.rmax</code> or call <code>FilterData</code> after creating the rosace object.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An Assay object
+</p>
+<p>An AssayGrowth object
+</p>
+
+
+</div>
+</body></html>

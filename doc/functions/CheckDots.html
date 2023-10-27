@@ -1,0 +1,55 @@
+<!DOCTYPE html><html><head><title>R: Check the use of the dots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>CheckDots</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Check the use of the dots</h2>
+
+<h3>Description</h3>
+
+<p>Function to check the use of unused arguments passed to <code>...</code>; this
+function is designed to be called from another function to see if an
+argument passed to <code>...</code> remains unused and alert the user if so.
+Adapted from Seurat::CheckDots
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>CheckDots(..., args = NULL, fxns = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Arguments passed to other methods</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>args</code></td>
+<td>
+<p>A list of arguments to check for unused arguments</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>fxns</code></td>
+<td>
+<p>A list of functions to check for unused arguments</p>
+</td></tr>
+</table>
+
+
+</div>
+</body></html>

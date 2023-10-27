@@ -1,0 +1,158 @@
+<!DOCTYPE html><html><head><title>R: Generate Score Violin Plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>scoreVlnplot</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Generate Score Violin Plot</h2>
+
+<h3>Description</h3>
+
+<p><code>scoreVlnplot</code> generates a series of violin plots for visualizing the
+distribution of scores across different positions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>scoreVlnplot(
+  data,
+  savedir,
+  pos.col = "position",
+  wt.col = "wildtype",
+  score.col = "mean",
+  jitter = FALSE,
+  c.fill = "lightblue",
+  npos = 50,
+  ncol = 1,
+  pos.step = 1,
+  x.text = 8,
+  y.text = 8,
+  seq.text = 3,
+  pt.size = 0.2,
+  ht = 30,
+  wd = 15,
+  name = "Violinplot",
+  savepdf = TRUE,
+  show = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
+<td>
+<p>Scores data frame. Expected to have columns containing information about
+position, control amino acid, mutated amino acid, mutation type, and score.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>savedir</code></td>
+<td>
+<p>A string providing the directory path to save plots.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pos.col</code></td>
+<td>
+<p>Column name in <code>data</code> for mutation positions. Default is <code>position</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>wt.col</code></td>
+<td>
+<p>Column name in <code>data</code> for wildtype amino acids. Default is <code>wildtype</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>score.col</code></td>
+<td>
+<p>Column name in <code>data</code> for mutation scores. Default is <code>mean</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>jitter</code></td>
+<td>
+<p>Logical indicating whether to add jitter points to violin plot.
+Default is <code>FALSE</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>c.fill</code></td>
+<td>
+<p>String indicating the fill color for the violin plots.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>npos</code></td>
+<td>
+<p>Integer specifying the number of positions per subplot. Default is <code>50</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ncol</code></td>
+<td>
+<p>Integer specifying the number of columns of subplots. Default is <code>1</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pos.step</code></td>
+<td>
+<p>Integer specifying the steps between x-axis labels. Default is <code>5</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>x.text</code></td>
+<td>
+<p>Numeric value for x-axis text size. Default is <code>8</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>y.text</code></td>
+<td>
+<p>Numeric value for x-axis text size. Default is <code>8</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>seq.text</code></td>
+<td>
+<p>Numeric value for wildtype sequence text size. Default is <code>3</code></p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pt.size</code></td>
+<td>
+<p>Numeric value specifying the size of jitter points. Default is <code>0.2</code></p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ht</code></td>
+<td>
+<p>Numeric value for the height of the saved plot. Default is <code>30</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>wd</code></td>
+<td>
+<p>Numeric value for the width of the saved plot. Default is <code>15</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>name</code></td>
+<td>
+<p>Character string specifying the base name of the saved file.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>savepdf</code></td>
+<td>
+<p>Logical indicating whether to also save a PDF version of the plot.
+Default is <code>TRUE</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>show</code></td>
+<td>
+<p>Logical indicating whether or not to display the plot in the viewer.
+Default is <code>FALSE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>NULL.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>## Not run: 
+scoreVlnplot(data = scores.data, jitter = TRUE, c.fill = "lightpink",
+            savedir = "./plots/", name = "ViolinPlot")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>
+</body></html>

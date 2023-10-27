@@ -1,0 +1,152 @@
+<!DOCTYPE html><html><head><title>R: Generate Score Density Plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>scoreDensity</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Generate Score Density Plot</h2>
+
+<h3>Description</h3>
+
+<p><code>scoreDensity</code> generates a density plot for visualizing the distribution of scores
+across different mutation types.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>scoreDensity(
+  data,
+  savedir,
+  type.col = "type",
+  score.col = "mean",
+  hist = FALSE,
+  nbins = 30,
+  c.fill = c("#FF7575", "lightgreen", "#7298BF", "#E0B0FF", "#FFDAB9", "#40E0D0"),
+  alpha = 0.5,
+  x.text = 10,
+  y.text = 10,
+  scale.free = FALSE,
+  space.free = FALSE,
+  ht = 10,
+  wd = 8,
+  name = "DensityPlot",
+  savepdf = TRUE,
+  show = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>data</code></td>
+<td>
+<p>Scores data frame. Expected to have columns containing information about
+position, control amino acid, mutated amino acid, mutation type, and score.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>savedir</code></td>
+<td>
+<p>Character string specifying the directory to save plots.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>type.col</code></td>
+<td>
+<p>Column name in <code>data</code> for mutation types. Default is <code>type</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>score.col</code></td>
+<td>
+<p>Column name in <code>data</code> for mutation scores. Default is <code>mean</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>hist</code></td>
+<td>
+<p>Logical indicating whether to plot count histogram or density.
+Default is <code>FALSE</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>nbins</code></td>
+<td>
+<p>Numeric value specifying the number of bins for the histogram.
+Default is <code>30</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>c.fill</code></td>
+<td>
+<p>Vector indicating the fill color for mutation types.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>alpha</code></td>
+<td>
+<p>Numeric value between 0-1 indicating the fill transparency.
+Default is <code>0.5</code></p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>x.text</code></td>
+<td>
+<p>Numeric value for x-axis text size. Default is <code>10</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>y.text</code></td>
+<td>
+<p>Numeric value for x-axis text size. Default is <code>10</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>scale.free</code></td>
+<td>
+<p>Logical indicating whether to make score range proportional.
+Default is <code>FALSE</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>space.free</code></td>
+<td>
+<p>Logical indicating whether to make panel heights variable.
+Default is <code>FALSE</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ht</code></td>
+<td>
+<p>Numeric value for the height of the saved plot. Default is <code>10</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>wd</code></td>
+<td>
+<p>Numeric value for the width of the saved plot. Default is <code>8</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>name</code></td>
+<td>
+<p>Character string specifying the base name of the saved file.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>savepdf</code></td>
+<td>
+<p>Logical indicating whether to also save a PDF version of the plot.
+Default is <code>TRUE</code>.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>show</code></td>
+<td>
+<p>Logical indicating whether or not to display the plot in the viewer.
+Default is <code>TRUE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>NULL.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class='language-R'>## Not run: 
+scoreDensity(data = scores.data, scale.free = TRUE,
+            savedir = "./plots/", name = "DensityPlot")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>
+</body></html>

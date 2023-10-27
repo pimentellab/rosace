@@ -5,5 +5,8 @@ permalink: /manual/
 order: 4
 ---
 
-Manual site, link to function htmls
-
+{% for file in site.static_files %}
+    {% if file.path contains '/doc/functions/' and file.extname == '.html' %}
+- [{{ file.name | remove: ".html" }}]({{ site.baseurl }}{{ file.path }})
+    {% endif %}
+{% endfor %}

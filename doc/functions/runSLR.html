@@ -1,0 +1,73 @@
+<!DOCTYPE html><html><head><title>R: Do simple linear regression on normalized count (Growth)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>runSLR</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Do simple linear regression on normalized count  (Growth)</h2>
+
+<h3>Description</h3>
+
+<p>For each variant, fit a simple linear regression on all replicates across
+different time points. The regression coefficient, standard error, p-value
+and any optional scores are returned as part of a Score object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>runSLR(object, ...)
+
+## S3 method for class 'AssayGrowth'
+runSLR(object, ...)
+
+## S3 method for class 'AssaySetGrowth'
+runSLR(object, ...)
+
+## S3 method for class 'Rosace'
+runSLR(object, name, type, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>object</code></td>
+<td>
+<p>An object: AssayGrowth, AssaySetGrowth, or Rosace</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to the regression method.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>name</code></td>
+<td>
+<p>character string of Assay/AssaySet name</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>type</code></td>
+<td>
+<p>Assay or AssaySet</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A Score object with regression result
+</p>
+
+
+</div>
+</body></html>

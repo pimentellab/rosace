@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Jingyou Rao" />
+
+
+<title>Introduction to rosace</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to rosace</h1>
+<h4 class="author">Jingyou Rao</h4>
+
+
+
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>To install <strong>rosace</strong> start R and first install devtools by
+typing:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;devtools&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>}</span></code></pre></div>
+<p>and install <strong>rosace</strong> by typing:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;pimentellab/rosace&quot;</span>)</span></code></pre></div>
+<p>If you have cloned the git repository locally, navigate to the
+<strong>rosace</strong> folder and type:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;.&quot;</span>) </span></code></pre></div>
+<p>Next load <strong>rosace</strong> with:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;rosace&quot;</span>)</span></code></pre></div>
+</div>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<div id="read-count-data" class="section level4">
+<h4>Read Count Data</h4>
+<p>To explain how to use <strong>rosace</strong> we provide an example
+based on the OCT1 drug cytotoxicity screen (<a href="https://www.biorxiv.org/content/10.1101/2023.06.06.543963v1.full" class="uri">https://www.biorxiv.org/content/10.1101/2023.06.06.543963v1.full</a>).</p>
+<p>The screen has three replicates. The count matrix is stored in
+“data/oct1.rda”.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;oct1&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="st">&quot;1SM73&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>type <span class="ot">&lt;-</span> <span class="st">&quot;growth&quot;</span></span></code></pre></div>
+</div>
+<div id="create-rosace-object" class="section level4">
+<h4>Create Rosace Object</h4>
+<p>First, load the count file into the Assay object. Each replicate in
+the experiment will form an Assay object and will share the same “key”
+(1SM73).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>assay1 <span class="ot">&lt;-</span> <span class="fu">CreateAssayObject</span>(<span class="at">counts =</span> <span class="fu">as.matrix</span>(oct1_rep1[<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(oct1_rep1)]),</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                            <span class="at">var.names =</span> oct1_rep1<span class="sc">$</span>hgvs,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                            <span class="at">key =</span> key, <span class="at">rep =</span> <span class="dv">1</span>, <span class="at">type =</span> type)</span></code></pre></div>
+<pre><code>## Warning: filtering 77 variants that have more than 0.5 missing data</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>assay2 <span class="ot">&lt;-</span> <span class="fu">CreateAssayObject</span>(<span class="at">counts =</span> <span class="fu">as.matrix</span>(oct1_rep2[<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(oct1_rep2)]),</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                            <span class="at">var.names =</span> oct1_rep2<span class="sc">$</span>hgvs,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>                            <span class="at">key =</span> key, <span class="at">rep =</span> <span class="dv">2</span>, <span class="at">type =</span> type)</span></code></pre></div>
+<pre><code>## Warning: filtering 57 variants that have more than 0.5 missing data</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>assay3 <span class="ot">&lt;-</span> <span class="fu">CreateAssayObject</span>(<span class="at">counts =</span> <span class="fu">as.matrix</span>(oct1_rep3[<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(oct1_rep3)]),</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>                            <span class="at">var.names =</span> oct1_rep3<span class="sc">$</span>hgvs,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>                            <span class="at">key =</span> key, <span class="at">rep =</span> <span class="dv">3</span>, <span class="at">type =</span> type)</span></code></pre></div>
+<pre><code>## Warning: filtering 115 variants that have more than 0.5 missing data</code></pre>
+<p>Next create Rosace object by adding three Assay objects together.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">CreateRosaceObject</span>(<span class="at">object =</span> assay1)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">AddAssayData</span>(<span class="at">object =</span> rosace, <span class="at">assay =</span> assay2)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">AddAssayData</span>(<span class="at">object =</span> rosace, <span class="at">assay =</span> assay3)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">GetAssayName</span>(rosace)</span></code></pre></div>
+<pre><code>## [1] &quot;1SM73_1&quot; &quot;1SM73_2&quot; &quot;1SM73_3&quot;</code></pre>
+</div>
+<div id="preprocessing" class="section level4">
+<h4>Preprocessing</h4>
+<p>‘CreateAssayObject’ calls function ‘FilterData’ to filter the
+variants with more than ‘na.rmax’% of NAs by default. But we might want
+to filter more variants later.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">FilterData</span>(rosace, <span class="at">key =</span> key, <span class="at">na.rmax =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<p>Then we will impute the NA data either by K-Nearest Neighbor method
+or fill the NA with 0.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">ImputeData</span>(rosace, <span class="at">key =</span> key, <span class="at">impute.method =</span> <span class="st">&quot;knn&quot;</span>, <span class="at">na.rmax =</span> <span class="fl">0.5</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co"># rosace &lt;- ImputeData(rosace, key = key, impute.method = &quot;zero&quot;)</span></span></code></pre></div>
+<p>With a complete count matrix in the Assay object, we will normalize
+the data by either a list of wild-type variants or by the total count at
+the time point.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">NormalizeData</span>(rosace, <span class="at">key =</span> key,</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>                        <span class="at">normalization.method =</span> <span class="st">&quot;wt&quot;</span>, </span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>                        <span class="at">wt.var.names =</span> <span class="fu">c</span>(<span class="st">&quot;_wt&quot;</span>), <span class="at">wt.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co"># rosace &lt;- NormalizeData(rosace, key = key, normalization.method = &quot;total&quot;)</span></span></code></pre></div>
+<p>After the Assay objects are all normalized, we can integrate three
+replicates into an Assays object stored in the “combined.assay” slot of
+the Rosace object.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">IntegrateData</span>(<span class="at">object =</span> rosace, <span class="at">key =</span> key)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">GetAssaySetName</span>(rosace)</span></code></pre></div>
+<pre><code>## [1] &quot;1SM73&quot;</code></pre>
+</div>
+<div id="naive-method-simple-linear-regression-optional" class="section level4">
+<h4>Naive Method: simple linear regression (optional)</h4>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">runSLR</span>(rosace, <span class="at">name =</span> key, <span class="at">type =</span> <span class="st">&quot;AssaySet&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">runSLR</span>(rosace, <span class="at">name =</span> <span class="fu">paste</span>(key, <span class="st">&quot;1&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="at">type =</span> <span class="st">&quot;Assay&quot;</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co"># rosace &lt;- runSLR(rosace, name = paste(key, &quot;2&quot;, sep = &quot;_&quot;), type = &quot;Assay&quot;)</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co"># rosace &lt;- runSLR(rosace, name = paste(key, &quot;3&quot;, sep = &quot;_&quot;), type = &quot;Assay&quot;)</span></span></code></pre></div>
+</div>
+<div id="process-variants-meta-data-provide-your-own-function" class="section level4">
+<h4>Process variants’ meta data (provide your own function)</h4>
+<p>Provide your own function for parsing “hgvs” into position, mutation,
+wildtype, and type of mutation.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">colnames</span>(rosace<span class="sc">@</span>var.data)</span></code></pre></div>
+<pre><code>## [1] &quot;variants&quot;</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>rosace<span class="sc">@</span>var.data <span class="ot">&lt;-</span> rosace<span class="sc">@</span>var.data <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tmp =</span> <span class="fu">substr</span>(variants, <span class="dv">4</span>, <span class="fu">nchar</span>(variants) <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>         <span class="at">position =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;[[:alpha:]]&quot;</span>, <span class="st">&quot;&quot;</span>, tmp)),</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>         <span class="at">wildtype =</span> <span class="fu">substr</span>(tmp, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>         <span class="at">tmp =</span> <span class="fu">substr</span>(tmp, <span class="dv">2</span>, <span class="fu">nchar</span>(tmp)),</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>         <span class="at">mutation =</span> <span class="fu">gsub</span>(<span class="st">&quot;[[:digit:]]&quot;</span>, <span class="st">&quot;&quot;</span>, tmp)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>tmp)</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>func_map <span class="ot">&lt;-</span> <span class="cf">function</span>(wt, mut) {</span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nchar</span>(wt) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">&quot;NA&quot;</span>)</span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a>  }</span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a>  </span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a>  <span class="cf">if</span> (wt <span class="sc">==</span> mut) {</span>
+<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">&quot;synonymous&quot;</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (mut <span class="sc">==</span> <span class="st">&quot;del&quot;</span>) {</span>
+<span id="cb22-17"><a href="#cb22-17" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">&quot;deletion&quot;</span>)</span>
+<span id="cb22-18"><a href="#cb22-18" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">&quot;missense&quot;</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" tabindex="-1"></a>  }</span>
+<span id="cb22-21"><a href="#cb22-21" tabindex="-1"></a>}</span>
+<span id="cb22-22"><a href="#cb22-22" tabindex="-1"></a></span>
+<span id="cb22-23"><a href="#cb22-23" tabindex="-1"></a>rosace<span class="sc">@</span>var.data <span class="ot">&lt;-</span> rosace<span class="sc">@</span>var.data <span class="sc">%&gt;%</span></span>
+<span id="cb22-24"><a href="#cb22-24" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb22-25"><a href="#cb22-25" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">func_map</span>(wildtype, mutation)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-26"><a href="#cb22-26" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb22-27"><a href="#cb22-27" tabindex="-1"></a><span class="fu">head</span>(rosace<span class="sc">@</span>var.data)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 5
+##   variants  position wildtype mutation type      
+##   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;     
+## 1 _wt             NA &quot;&quot;       &quot;&quot;       NA        
+## 2 p.(A107A)      107 &quot;A&quot;      &quot;A&quot;      synonymous
+## 3 p.(A107C)      107 &quot;A&quot;      &quot;C&quot;      missense  
+## 4 p.(A107D)      107 &quot;A&quot;      &quot;D&quot;      missense  
+## 5 p.(A107E)      107 &quot;A&quot;      &quot;E&quot;      missense  
+## 6 p.(A107F)      107 &quot;A&quot;      &quot;F&quot;      missense</code></pre>
+</div>
+<div id="run-rosace" class="section level4">
+<h4>Run ROSACE</h4>
+<p>There are three ways to run ROSACE model: 1) Provide no position or
+control column. The model would treat each variant independently but
+with shrinkage on the variance component. 2) Provide position column
+only. In addition, the model would group variants together with the
+amino acid position information provided. 3) Provide both position and
+control column (recommended). In addition, the model would group all
+control variants together into one position label.</p>
+<p>For the purpose of this vignette, we’ve reduced the number of
+variants to 100 with brute force before running ROSACE, since running on
+the full dataset might take an hour.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># running on an Assay (one replicate)</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>rosace<span class="sc">@</span>assays<span class="sc">$</span><span class="st">`</span><span class="at">1SM73_1</span><span class="st">`</span><span class="sc">@</span>norm.counts <span class="ot">&lt;-</span> rosace<span class="sc">@</span>assays<span class="sc">$</span><span class="st">`</span><span class="at">1SM73_1</span><span class="st">`</span><span class="sc">@</span>norm.counts[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>rosace<span class="sc">@</span>assays<span class="sc">$</span><span class="st">`</span><span class="at">1SM73_1</span><span class="st">`</span><span class="sc">@</span>norm.var.names <span class="ot">&lt;-</span> rosace<span class="sc">@</span>assays<span class="sc">$</span><span class="st">`</span><span class="at">1SM73_1</span><span class="st">`</span><span class="sc">@</span>norm.var.names[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">RunRosace</span>(<span class="at">object =</span> rosace,</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>                    <span class="at">name =</span> <span class="st">&quot;1SM73_1&quot;</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">&quot;Assay&quot;</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>                    <span class="at">savedir =</span> <span class="st">&quot;../tests/results/stan/assay/&quot;</span>, </span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>                    <span class="at">pos.col =</span> <span class="st">&quot;position&quot;</span>, </span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>                    <span class="at">ctrl.col =</span> <span class="st">&quot;type&quot;</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>                    <span class="at">ctrl.name =</span> <span class="st">&quot;synonymous&quot;</span>,</span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>                    <span class="at">install =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># running on an AssaySet (all three replicates)</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>rosace<span class="sc">@</span>assay.sets<span class="sc">$</span><span class="st">`</span><span class="at">1SM73</span><span class="st">`</span><span class="sc">@</span>raw.counts <span class="ot">&lt;-</span> rosace<span class="sc">@</span>assay.sets<span class="sc">$</span><span class="st">`</span><span class="at">1SM73</span><span class="st">`</span><span class="sc">@</span>raw.counts[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>rosace<span class="sc">@</span>assay.sets<span class="sc">$</span><span class="st">`</span><span class="at">1SM73</span><span class="st">`</span><span class="sc">@</span>combined.counts <span class="ot">&lt;-</span> rosace<span class="sc">@</span>assay.sets<span class="sc">$</span><span class="st">`</span><span class="at">1SM73</span><span class="st">`</span><span class="sc">@</span>combined.counts[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>rosace<span class="sc">@</span>assay.sets<span class="sc">$</span><span class="st">`</span><span class="at">1SM73</span><span class="st">`</span><span class="sc">@</span>var.names <span class="ot">&lt;-</span> rosace<span class="sc">@</span>assay.sets<span class="sc">$</span><span class="st">`</span><span class="at">1SM73</span><span class="st">`</span><span class="sc">@</span>var.names[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>rosace <span class="ot">&lt;-</span> <span class="fu">RunRosace</span>(<span class="at">object =</span> rosace,</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>                    <span class="at">name =</span> <span class="st">&quot;1SM73&quot;</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">&quot;AssaySet&quot;</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>                    <span class="at">savedir =</span> <span class="st">&quot;../tests/results/stan/assayset/&quot;</span>,</span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>                    <span class="at">pos.col =</span> <span class="st">&quot;position&quot;</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a>                    <span class="at">ctrl.col =</span> <span class="st">&quot;type&quot;</span>, </span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a>                    <span class="at">ctrl.name =</span> <span class="st">&quot;synonymous&quot;</span>,</span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a>                    <span class="at">install =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+
+<p>To visualize the results, refer to the <a href="visualizing_rosace_scores.html"><em>Visualizing functional score results</em></a> vignette.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html><html><head><title>R: Filter out variants in raw count data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>FilterData</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Filter out variants in raw count data</h2>
+
+<h3>Description</h3>
+
+<p>Normalize the data by either a list of wild-type variants
+or by the total count at the time point.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>FilterData(object, ...)
+
+## S3 method for class 'AssayGrowth'
+FilterData(object, na.rmax = 0.5, ...)
+
+## S3 method for class 'Rosace'
+FilterData(object, name, key, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>object</code></td>
+<td>
+<p>An object: AssayGrowth (na.rm), or Rosace</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to the filtering method.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>na.rmax</code></td>
+<td>
+<p>The maximum ratio of NA values allowed in a variant</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>name</code></td>
+<td>
+<p>character string of AssayGrowth name</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>key</code></td>
+<td>
+<p>key of AssayGrowth</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If normalizing by wild-type variants, the wild-type
+variant names must be specified using <code>wt.var.names</code>
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object with filtered count
+</p>
+
+
+</div>
+</body></html>

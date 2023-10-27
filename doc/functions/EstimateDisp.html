@@ -1,0 +1,70 @@
+<!DOCTYPE html><html><head><title>R: Estimate dispersion from raw count (use all time points)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>EstimateDisp</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Estimate dispersion from raw count (use all time points)</h2>
+
+<h3>Description</h3>
+
+<p>Estimate dispersion from raw count (use all time points)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>EstimateDisp(object, ...)
+
+## S3 method for class 'AssayGrowth'
+EstimateDisp(object, ctrl.label, ...)
+
+## S3 method for class 'Rosace'
+EstimateDisp(object, name, ctrl.col, ctrl.name, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>object</code></td>
+<td>
+<p>An object: AssayGrowth, or Rosace</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to the estimation method.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.label</code></td>
+<td>
+<p>Boolean vector indicating control variants</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>name</code></td>
+<td>
+<p>Name of AssayGrowth</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.col</code></td>
+<td>
+<p>Name of column in score.df that contains type of variants</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.name</code></td>
+<td>
+<p>Label of control variants in ctrl.col</p>
+</td></tr>
+</table>
+
+
+</div>
+</body></html>

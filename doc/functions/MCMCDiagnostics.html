@@ -1,0 +1,55 @@
+<!DOCTYPE html><html><head><title>R: Extract MCMC diagnostics from CmdStanMCMC object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>MCMCDiagnostics</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Extract MCMC diagnostics from CmdStanMCMC object</h2>
+
+<h3>Description</h3>
+
+<p>Extract MCMC diagnostics from CmdStanMCMC object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>MCMCDiagnostics(fit, sampler = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>fit</code></td>
+<td>
+<p>CmdStanMCMC object</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>sampler</code></td>
+<td>
+<p>whether to get diagnostics summary or
+extract detailed sampler diagnostics</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>list of diagnostics summary or data.frame of sampler diagnostics
+</p>
+
+
+</div>
+</body></html>

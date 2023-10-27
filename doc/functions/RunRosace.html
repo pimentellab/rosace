@@ -1,0 +1,160 @@
+<!DOCTYPE html><html><head><title>R: Run Rosace on an Assay/AssaySet object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>RunRosace</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Run Rosace on an Assay/AssaySet object</h2>
+
+<h3>Description</h3>
+
+<p>Rosace operates under the assumption that aligned counts are generated
+by a time-dependent linear function. This function performs inference
+using stan under a Bayesian framework to derive the functional score
+(regression coefficient), error term and parameters phi and sigma.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class='language-R'>RunRosace(object, savedir, mc.cores, debug, install, ...)
+
+## S3 method for class 'AssayGrowth'
+RunRosace(
+  object,
+  savedir,
+  mc.cores = 4,
+  debug = FALSE,
+  install = TRUE,
+  pos.label,
+  ctrl.label,
+  ...
+)
+
+## S3 method for class 'AssaySetGrowth'
+RunRosace(
+  object,
+  savedir,
+  mc.cores = 4,
+  debug = FALSE,
+  install = TRUE,
+  pos.label,
+  ctrl.label,
+  ...
+)
+
+## S3 method for class 'Rosace'
+RunRosace(
+  object,
+  savedir,
+  mc.cores = 4,
+  debug = FALSE,
+  install = TRUE,
+  name,
+  type,
+  pos.col,
+  ctrl.col,
+  ctrl.name,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;"><td><code>object</code></td>
+<td>
+<p>Rosace, Assay/AssaySet (default)</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>savedir</code></td>
+<td>
+<p>directory to save the output</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>mc.cores</code></td>
+<td>
+<p>integer, number of cores to use for parallel computing</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>debug</code></td>
+<td>
+<p>logical, if TRUE, return a list of cmdstanfit and Score object.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>install</code></td>
+<td>
+<p>logical, if TRUE, install or update cmdstanr
+There's a chance for Github download error if running multiple instances on a server.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to the run method.</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pos.label</code></td>
+<td>
+<p>vector of true position of variants</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.label</code></td>
+<td>
+<p>vector of whether variant is in the control group (NA if none provided)</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>name</code></td>
+<td>
+<p>Name of the object to be analyzed</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>type</code></td>
+<td>
+<p>&quot;Assay&quot; or &quot;AssaySet&quot;</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pos.col</code></td>
+<td>
+<p>For Growth screen, the column name for position in the var.data
+(optional in no_pos mode)</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.col</code></td>
+<td>
+<p>For Growth screen, optional for control to have one position index</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>ctrl.name</code></td>
+<td>
+<p>For Growth screen, optional, the name of the control type</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>There are three ways to run the model. If no meta-info of the variant is
+given, the model treats variant independently. If position info is given,
+the model will have a position hierarchical layer (grouping variants
+of the same position together). If an additional control (synonymous) label
+is given, the model will group the control variants together into one
+position index.
+</p>
+<p>The debug option will return a list of cmdstanfit object and the final
+Score object. Users familiar with stan could extract more diagnostics
+and sampling details from the cmdstanfit object. If a high percentage of
+divergent transitions exist during sampling, users could debug with this
+option. However, users not familiar with HMC or stan are recommended to
+report the error either on GitHub or send an email to the team.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A object with Rosace result (Score object) if debug = FALSE
+</p>
+
+
+</div>
+</body></html>

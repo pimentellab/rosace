@@ -1,0 +1,50 @@
+<!DOCTYPE html><html><head><title>R: The AssaySet Class</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<script type="text/javascript">
+const macros = { "\\R": "\\textsf{R}", "\\code": "\\texttt"};
+function processMathHTML() {
+    var l = document.getElementsByClassName('reqn');
+    for (let e of l) { katex.render(e.textContent, e, { throwOnError: false, macros }); }
+    return;
+}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+    onload="processMathHTML();"></script>
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table style="width: 100%;"><tr><td>AssaySet-class</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>The AssaySet Class</h2>
+
+<h3>Description</h3>
+
+<p>The AssaySet Class
+</p>
+<p>The AssaySetGrowth Class
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>combined.counts</code></dt><dd><p>A matrix of counts (variants x cols in reps)</p>
+</dd>
+<dt><code>var.names</code></dt><dd><p>A vector of variant names corresponding
+to the row of combined.counts.</p>
+</dd>
+<dt><code>reps</code></dt><dd><p>A vector of replicate identity</p>
+</dd>
+<dt><code>key</code></dt><dd><p>A character string for the experiment</p>
+</dd>
+<dt><code>raw.counts</code></dt><dd><p>A matrix of raw counts (variants x cols in reps)</p>
+</dd>
+<dt><code>rounds</code></dt><dd><p>A vector of number of rounds</p>
+</dd>
+</dl>
+
+
+</div>
+</body></html>
