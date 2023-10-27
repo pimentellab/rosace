@@ -321,7 +321,8 @@ scoreDensity <- function(data,
                          score.col = "mean",
                          hist = FALSE,
                          nbins = 30,
-                         c.fill = c('#FF7575', 'lightgreen', "#7298BF"),
+                         c.fill = c('#FF7575', 'lightgreen', "#7298BF",
+                                    '#E0B0FF','#FFDAB9', '#40E0D0'),
                          alpha = 0.5,
                          x.text = 10,
                          y.text = 10,
@@ -336,8 +337,10 @@ scoreDensity <- function(data,
   
   sc <- ifelse(scale.free, "free_y", "fixed")
   sp <- ifelse(space.free, "free_y", "fixed")
-  if (length(c.fill) != length(levels(factor(data[[type.col]])))) {
-    warning("Length of color vector does not match the number of mutation types.")
+  if (length(c.fill) < length(levels(factor(data[[type.col]])))) {
+    stop(paste("Not enough colors in c.fill for",
+               length(levels(factor(data[[type.col]]))),
+               "mutations, supply more colors"))
   }
   
   p <- ggplot(data, aes(x = .data[[score.col]], fill = .data[[type.col]])) +
