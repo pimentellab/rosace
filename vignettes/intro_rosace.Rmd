@@ -9,13 +9,15 @@ vignette: >
 ---
 
 ```{r setup, echo=FALSE, results="hide"}
-knitr::opts_chunk$set(tidy = FALSE, cache = FALSE, dev = "png",
+knitr::opts_chunk$set(tidy = FALSE, cache = FALSE, 
+                      dev = "png", dpi=300, fig.align="center", out.width = "100%",
+                      fig.width=6, fig.height = 4,
                       message = FALSE, error = FALSE, warning = TRUE)
 ```	
 
 ## Installation
 
-To install __rosace__ start [R](https://www.r-project.org) and first install devtools by typing:
+To install `rosace` start R and first install devtools by typing:
 
 ```{r eval=FALSE}
 if (!requireNamespace("devtools", quietly = TRUE)) {
@@ -23,19 +25,19 @@ if (!requireNamespace("devtools", quietly = TRUE)) {
 }
 ```
 
-and install __rosace__ by typing:
+and install `rosace` by typing:
 
 ```{r eval=FALSE}
 devtools::install_github("pimentellab/rosace")
 ```
 
-If you have cloned the git repository locally, navigate to the __rosace__ folder and type:
+If you have cloned the git repository locally, navigate to the `rosace` folder and type:
 
 ```{r eval=FALSE}
 devtools::install(".") 
 ```
 
-Next load __rosace__ with:
+Next load `rosace` with:
 
 ```{r}
 library("rosace")
@@ -45,7 +47,7 @@ library("rosace")
 
 #### Read Count Data
 
-To explain how to use __rosace__ we provide an example based on the OCT1 drug cytotoxicity screen (https://www.biorxiv.org/content/10.1101/2023.06.06.543963v1.full). 
+To explain how to use `rosace` we provide an example based on the OCT1 drug cytotoxicity screen (https://www.biorxiv.org/content/10.1101/2023.06.06.543963v1.full). 
 
 The screen has three replicates. The count matrix is stored in "data/oct1.rda".
 
@@ -157,9 +159,9 @@ rosace@var.data <- rosace@var.data %>%
 head(rosace@var.data)
 ```
 
-#### Run ROSACE
+#### Run Rosace
 
-There are three ways to run ROSACE model:
+There are three ways to run Rosace model:
 1) Provide no position or control column. 
 The model would treat each variant independently but with shrinkage on the variance component.
 2) Provide position column only.
@@ -167,7 +169,7 @@ In addition, the model would group variants together with the amino acid positio
 3) Provide both position and control column (recommended).
 In addition, the model would group all control variants together into one position label.
 
-For the purpose of this vignette, we've reduced the number of variants to 100 with brute force before running ROSACE, since running on the full dataset might take an hour.
+For the purpose of this vignette, we've reduced the number of variants to 100 with brute force before running Rosace, since running on the full dataset might take an hour.
 
 ```{r message=FALSE}
 # running on an Assay (one replicate)
@@ -196,5 +198,65 @@ rosace <- RunRosace(object = rosace,
                     install = FALSE)
 ```
 
+The Rosace results can be retrieved using the `OutputScore` function. First, check the name of your Rosace run:
+```{r}
+names(rosace@scores)
+```
 
-To visualize the results, refer to the *Visualizing functional score results* vignette.
+Then extract the scores data, which includes the variant information, functional score (`mean`), standard deviation (`sd`), and the local false sign discovery rate (`lfsr`) associated with the score.
+```{r}
+scores.data <- OutputScore(rosace, name = "1SM73_ROSACE")
+head(scores.data)
+```
+The functional score represents the slope of the linear regression applied to normalized counts across time points, which serves as a measure of cell growth. A positive score indicates the mutation has a a gain of function (GOF) effect, while a negative score indicates a loss of function (LOF) effect. The Rosace model learns a distribution of scores and reports the mean for each variant. 
+
+The `lfsr`, or local false sign rate, offers a Bayesian perspective for estimating uncertainty in the sign of the score. For a negative mean score, `lfsr` estimates the probability it could truly be positive, and vice versa. The below section illustrates how to use score and `lfsr` to identify LOF and GOF mutations. 
+
+#### Interpret Rosace results
+
+To have a more comprehensive understanding and clearer view of the score distribution, we've made available a precomputed object based on the complete OCT1 dataset. This may help you draw parallel to your own data. 
+
+```{r}
+# obtain the data 
+data("oct1_rosace_scored")
+
+# extract scores 
+scores.data <- OutputScore(oct1_rosace_scored, name = "1SM73_ROSACE")
+head(scores.data)
+```
+
+First, we can visualize the distribution of scores across mutation types with the `scoreDensity` function.
+```{r}
+scoreDensity(scores.data, 
+             hist = FALSE,
+             savedir = "../tests/results/stan/assayset_full/plot/", 
+             name = "DensityPlot_1SM73")
+```
+For other visualizations including visualizing position-wise distributions, refer to the *Visualizing functional score results* vignette.
+
+
+A common goal in DMS experiments is to determine which mutations cause a GOF or a LOF. One natural approach is to conduct hypothesis testing to check whether a score is significantly different from 0. To do this, we first order the variants by the absolute value of their score, then rank them by `lfsr` in ascending order. small values of `lfsr` indicate that we can be confident in the sign of the score. A variant with a large positive or negative score and `lfsr` close to 0 is likely a GOF or LOF, respectively.
+
+```{r}
+scores.data <- scores.data %>%
+  arrange(desc(abs(mean)), lfsr)
+head(scores.data)
+```
+
+You can choose a threshold for `lfsr` to classify mutations above it as neutral, and those below it as either GOF or LOF. The code below labels mutations into GOF, LOF, and neutral based on the score and `lfsr` < 0.05.
+
+```{r}
+scores.data <- scores.data %>%
+  mutate(effect = case_when(
+    mean > 0 & lfsr < 0.05 ~ "GOF",
+    mean < 0 & lfsr < 0.05 ~ "LOF",
+    TRUE ~ "neutral"
+  ))
+
+table(scores.data$effect)
+```
+Keep in mind that setting a threshold is a somewhat counter-Bayesian approach. The threshold should be adaptable, depending on the nature of the experiment and distribution of the data. You may be more or less conservative with thresholding based on the context and prior knowledge.
+
+<div style="height: 200px;"></div>
+
+
