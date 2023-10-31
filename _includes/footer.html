@@ -3,15 +3,6 @@
 
   <div class="wrapper simple-footer-wrapper">
     <p>
-      {%- if site.description -%}
-        {{ site.description | escape }}
-      {%- endif -%}
-
-      {%- if site.email -%}
-        {{ " Contact " | escape }}
-        <a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a>.
-      {%- endif -%}
-
       {%- capture social_links -%}
         {%- include social.html -%}
      {%- endcapture -%}

@@ -118,20 +118,22 @@
  * Site footer
  */
  .site-footer {
+  display: flex;
+  align-items: center;
   border-top: 1px solid $grey-color-light;
   padding: $spacing-unit / 4;
   text-align: center; 
 }
 
 .site-footer p {
-  padding-top: 10px;
+  padding-top: 0px;
 }
 
 .contact-list,
 .social-media-list {
   list-style: none;
   margin-left: 0;
-  margin-bottom: -15px;
+  margin-bottom: 10px;
 }
 
 .simple-footer-wrapper {
