@@ -205,7 +205,7 @@ names(rosace@scores)
 
 Then extract the scores data, which includes the variant information, functional score (`mean`), standard deviation (`sd`), and the local false sign discovery rate (`lfsr`) associated with the score.
 ```{r}
-scores.data <- OutputScore(rosace, name = "1SM73_ROSACE")
+scores.data <- OutputScore(rosace, pos.info = FALSE, name = "1SM73_ROSACE")
 head(scores.data)
 ```
 The functional score represents the slope of the linear regression applied to normalized counts across time points, which serves as a measure of cell growth. A positive score indicates the mutation has a a gain of function (GOF) effect, while a negative score indicates a loss of function (LOF) effect. The Rosace model learns a distribution of scores and reports the mean for each variant. 
@@ -273,10 +273,14 @@ scores.data %>% arrange(mean, lfsr.neg) %>% head(5)
 
 #### Position-level estiamte
 
+When running with the position mode (default), Rosace infers position-specific mean estimate ("phi") and position-specific variance estimate ("sigma2"). The hypothesis testing columns can be interpreted the same way as the ones in the variant-specific section.
 
-
-
-
+```{r}
+scores.data.list <- OutputScore(oct1_rosace_scored, pos.info = TRUE, name = "1SM73_ROSACE", sig.test = 0.05)
+scores.var <- scores.data.list$df_variant
+scores.pos <- scores.data.list$df_position
+head(scores.pos)
+```
 
 
 <div style="height: 200px;"></div>

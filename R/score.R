@@ -101,7 +101,7 @@ CreateScoreObject <- function(
 #' @rdname OutputScore
 #' @method OutputScore Score
 #' @export
-OutputScore.Score <- function(object, sig.test = 0.05, ...) {
+OutputScore.Score <- function(object, pos.info = FALSE, sig.test = 0.05, ...) {
   CheckDots(...)
 
   # for Rosace method only
@@ -117,6 +117,38 @@ OutputScore.Score <- function(object, sig.test = 0.05, ...) {
              label = ifelse(.data$test.neg, "Neg", "Neutral"),
              label = ifelse(.data$test.pos, "Pos", .data$label)) %>%
       dplyr::ungroup()
+
+    if (pos.info == TRUE) {
+      df_pos <- cbind(df,
+                      object@optional.score %>%
+                        dplyr::select(.data$ctrl, .data$pos,
+                                      .data$phi_mean, .data$phi_sd,
+                                      .data$sigma2_mean, .data$sigma2_sd))
+      df_pos <- df_pos %>%
+        dplyr::filter(.data$ctrl == FALSE) %>%
+        dplyr::select(.data$pos, .data$phi_mean, .data$phi_sd, .data$sigma2_mean, .data$sigma2_sd) %>%
+        unique() %>%
+        arrange(.data$pos)
+
+      df_pos <- df_pos %>% dplyr::rowwise() %>%
+        mutate(lfsr.neg = stats::pnorm(0, mean = .data$phi_mean, sd = .data$sigma2_mean, lower.tail = FALSE),
+               lfsr.pos = stats::pnorm(0, mean = .data$phi_mean, sd = .data$sigma2_mean, lower.tail = TRUE),
+               lfsr = min(.data$lfsr.neg, .data$lfsr.pos),
+               test.neg = (.data$lfsr.neg <= sig.test/2),
+               test.pos = (.data$lfsr.pos <= sig.test/2),
+               label = ifelse(.data$test.neg, "Neg", "Neutral"),
+               label = ifelse(.data$test.pos, "Pos", .data$label)) %>%
+        dplyr::ungroup()
+
+      df <- cbind(df,
+                  object@optional.score %>%
+                    dplyr::select(.data$phi_mean, .data$phi_sd,
+                                  .data$sigma2_mean, .data$sigma2_sd))
+
+      return(list(df_variant = df,
+                  df_position = df_pos))
+    }
+
   } else {
     df <- object@score
     warning("OutputScore only supports hypothesis testing labeling for Rosace method.
@@ -130,14 +162,19 @@ OutputScore.Score <- function(object, sig.test = 0.05, ...) {
 #' @rdname OutputScore
 #' @method OutputScore Rosace
 #' @export
-OutputScore.Rosace <- function(object, sig.test = 0.05, name, ...) {
+OutputScore.Rosace <- function(object, pos.info = FALSE, sig.test = 0.05, name, ...) {
   CheckDots(...)
   score <- ExtractScore(object, name)
-  score <- OutputScore(score, sig.test = sig.test)
   var <- ExtractVarScore(object, name)
-  df <- cbind(var, score[, -1])
-
-  return(df)
+  if (pos.info == FALSE) {
+    score <- OutputScore(score, pos.info = pos.info, sig.test = sig.test)
+    df <- cbind(var, score[, -1])
+    return(df)
+  } else {
+    score_list <- OutputScore(score, pos.info = pos.info, sig.test = sig.test)
+    score_list$df_variant <- cbind(var, score_list$df_variant[, -1])
+    return(score_list)
+  }
 }
 
 

@@ -34,14 +34,16 @@ CreateRosaceObject <- function(object,
 #'
 #' @param object Either a Rosace object or a Score object
 #' @param sig.test Numeric from 0 to 1, threshold for test statistics
+#' @param pos.info Boolean, whether to output the position-level score
 #' @param ... Additional arguments passed to OutputScore
 #'
-#' @return A dataframe of score
+#' @return A data frame of variant score.
+#' If pos.info is TRUE, return a list of data frame (variant and position)
 #'
 #' @rdname OutputScore
 #' @export
 #'
-OutputScore <- function(object, sig.test = 0.05, ...) {
+OutputScore <- function(object, pos.info = FALSE, sig.test = 0.05, ...) {
   UseMethod(generic = 'OutputScore', object = object)
 }
 

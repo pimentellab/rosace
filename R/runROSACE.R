@@ -611,6 +611,8 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, thred = 10) {
     curr_idx <- index
     df_map$ctrl <- ctrl.label
     df_map <- df_map %>% dplyr::mutate(index = ifelse(.data$ctrl, curr_idx, .data$index))
+  } else {
+    df_map$ctrl <- FALSE
   }
 
   return(df_map)
