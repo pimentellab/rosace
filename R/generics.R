@@ -157,7 +157,6 @@ GenRosaceInput <- function(object, save.input, ...) {
 #'
 #' @param object Assay or AssaySet
 #' @param main.score functional score
-#' @param var.map variant map
 #' @param param.post (optional) posterior of parameters other than "functional score"
 #' @param diags (optional) diagnostics of MCMC
 #'
@@ -166,7 +165,7 @@ GenRosaceInput <- function(object, save.input, ...) {
 #' @rdname MCMCCreateScore
 #' @export
 #'
-MCMCCreateScore <- function(object, main.score, var.map, param.post, diags) {
+MCMCCreateScore <- function(object, main.score, param.post, diags) {
   UseMethod(generic = 'MCMCCreateScore', object = object)
 }
 

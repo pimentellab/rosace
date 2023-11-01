@@ -283,10 +283,12 @@ GenRosaceInput.AssaySetGrowth <- function(object, save.input, pos.label, ctrl.la
 #' @rdname MCMCCreateScore
 #' @method MCMCCreateScore Assay
 #' @export
-MCMCCreateScore.Assay <- function(object, main.score, var.map,
+MCMCCreateScore.Assay <- function(object, main.score,
                                   param.post, diags) { # optional, can be missing
 
-  score_all <- cbind(var.map, main.score)
+  # score_all <- cbind(var.map, main.score)
+  score_all <- main.score
+
   score <- score_all %>%
     dplyr::select(.data$variants, .data$mean, .data$sd, .data$lfsr)
   optional.score <- score_all %>%
@@ -314,10 +316,12 @@ MCMCCreateScore.Assay <- function(object, main.score, var.map,
 #' @rdname MCMCCreateScore
 #' @method MCMCCreateScore AssaySet
 #' @export
-MCMCCreateScore.AssaySet <- function(object, main.score, var.map,
+MCMCCreateScore.AssaySet <- function(object, main.score,
                                      param.post, diags) { # optional, can be missing
 
-  score_all <- cbind(var.map, main.score)
+  # score_all <- cbind(var.map, main.score)
+  score_all <- main.score
+
   score <- score_all %>% dplyr::select(.data$variants, .data$mean, .data$sd, .data$lfsr)
   optional.score <- score_all %>% dplyr::select(-.data$variants, -.data$mean, -.data$sd, -.data$lfsr)
 
@@ -500,6 +504,8 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
   main.score <- MCMCScoreDf(fit, param.key = "beta",
                             savefile = paste(savedir, "/scores_", names(object), ".tsv", sep = ""),
                             output.lfsr = TRUE)
+  main.score <- cbind(df_map, main.score)
+
   epsilon <-  MCMCScoreDf(fit, param.key = "epsilon",
                           savefile = paste(savedir, "/epsilon.tsv", sep = ""),
                           output.lfsr = FALSE)
@@ -518,15 +524,12 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
       dplyr::select(.data$index, phi_mean = .data$mean, phi_sd = .data$sd)
     sigma <- sigma %>% dplyr::select(sigma2_mean = .data$mean, sigma2_sd = .data$sd)
     df_pos_index <- cbind(phi, sigma)
-    main.score <- cbind(main.score, df_map[, -1])
     main.score <- main.score %>%
       dplyr::left_join(df_pos_index, by = c("index" = "index"))
   }
 
   # Create Score Object
-  score <- MCMCCreateScore(object = object, var.map = df_map,
-                           main.score = main.score,
-                           diags = diags)
+  score <- MCMCCreateScore(object = object, main.score = main.score, diags = diags)
 
   if (debug) {
     return(list(score = score, fit = fit))

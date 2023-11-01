@@ -6,18 +6,16 @@
 \alias{MCMCCreateScore.AssaySet}
 \title{Create score object from MCMC result}
 \usage{
-MCMCCreateScore(object, main.score, var.map, param.post, diags)
+MCMCCreateScore(object, main.score, param.post, diags)
 
-\method{MCMCCreateScore}{Assay}(object, main.score, var.map, param.post, diags)
+\method{MCMCCreateScore}{Assay}(object, main.score, param.post, diags)
 
-\method{MCMCCreateScore}{AssaySet}(object, main.score, var.map, param.post, diags)
+\method{MCMCCreateScore}{AssaySet}(object, main.score, param.post, diags)
 }
 \arguments{
 \item{object}{Assay or AssaySet}
 
 \item{main.score}{functional score}
-
-\item{var.map}{variant map}
 
 \item{param.post}{(optional) posterior of parameters other than "functional score"}
 
