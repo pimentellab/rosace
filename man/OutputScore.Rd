@@ -6,14 +6,16 @@
 \alias{OutputScore.Rosace}
 \title{Output Score data frame}
 \usage{
-OutputScore(object, ...)
+OutputScore(object, sig.test = 0.05, ...)
 
-\method{OutputScore}{Score}(object, ...)
+\method{OutputScore}{Score}(object, sig.test = 0.05, ...)
 
-\method{OutputScore}{Rosace}(object, name, ...)
+\method{OutputScore}{Rosace}(object, sig.test = 0.05, name, ...)
 }
 \arguments{
 \item{object}{Either a Rosace object or a Score object}
+
+\item{sig.test}{Numeric from 0 to 1, threshold for test statistics}
 
 \item{...}{Additional arguments passed to OutputScore}
 

@@ -25,7 +25,7 @@ CreateRosaceObject <- function(object,
   UseMethod(generic = 'CreateRosaceObject', object = object)
 }
 
-########## score.R ##########
+########## score.R #####å#####
 
 #' Output Score data frame
 #'
@@ -33,6 +33,7 @@ CreateRosaceObject <- function(object,
 #' of the variants in the data frame as well.
 #'
 #' @param object Either a Rosace object or a Score object
+#' @param sig.test Numeric from 0 to 1, threshold for test statistics
 #' @param ... Additional arguments passed to OutputScore
 #'
 #' @return A dataframe of score
@@ -40,7 +41,7 @@ CreateRosaceObject <- function(object,
 #' @rdname OutputScore
 #' @export
 #'
-OutputScore <- function(object, ...) {
+OutputScore <- function(object, sig.test = 0.05, ...) {
   UseMethod(generic = 'OutputScore', object = object)
 }
 
