@@ -129,7 +129,7 @@ MCMCScoreDf <- function(fit, param.key, param.post, savefile, output.lfsr = TRUE
     if (length(param.name) == 0) {
       stop("No parameter found. Check the spelling of param.key.")
     }
-    
+
     df <-
       fit$summary(param.name, mean, stats::sd,
                   ~stats::quantile(.x, probs = c(0.025, 0.25, 0.5, 0.75, 0.975)))
@@ -162,7 +162,7 @@ MCMCScoreDf <- function(fit, param.key, param.post, savefile, output.lfsr = TRUE
 
 
 #' @param pos.label vector of true position of variants
-#' @param ctrl.label vector of whether variant is control 
+#' @param ctrl.label vector of whether variant is control
 #' @param thred integer, threshold for number of variants per position label (index)
 #' Passed to function "varPosIndexMap"
 #‘
@@ -178,7 +178,7 @@ GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label
   raw.counts <- object@counts[row_idx, ]
   vMAPm <- ceiling(rank(rowSums(raw.counts, na.rm = TRUE))/25)
 
-  
+
   if (!is.na(pos.label[1])) {
     # generate variants - position mapping
     df_map <-
@@ -189,7 +189,7 @@ GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label
     if (max(df_map$index) != length(unique(df_map$index))) {
       stop("Error when generating position index.")
     }
-    
+
     # generate input list
     input <- list(m = object@norm.counts,
                   T = object@rounds + 1,
@@ -203,7 +203,7 @@ GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label
   } else {
     # generate variants "map"
     df_map <- data.frame(variants = object@norm.var.names)
-    
+
     # generate input list
     input <- list(m = object@norm.counts,
                   T = object@rounds + 1,
@@ -222,7 +222,7 @@ GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label
 }
 
 #' @param pos.label vector of true position of variants
-#' @param ctrl.label vector of whether variant is control 
+#' @param ctrl.label vector of whether variant is control
 #' @param thred integer, threshold for number of variants per position label (index)
 #' Passed to function "varPosIndexMap"
 #' @rdname GenRosaceInput
@@ -297,7 +297,7 @@ MCMCCreateScore.Assay <- function(object, main.score, var.map,
     misc <- append(misc, list(param.post = param.post))
   }
   if (!missing(diags)) {
-    diags <- append(misc, list(diags = diags))
+    misc <- append(misc, list(diags = diags))
   }
   if (isa(object, "AssayGrowth")) { # for Rosette Object
     misc <- append(misc, list(rounds = object@rounds))
@@ -326,7 +326,7 @@ MCMCCreateScore.AssaySet <- function(object, main.score, var.map,
     misc <- append(misc, list(param.post = param.post))
   }
   if (!missing(diags)) {
-    diags <- append(misc, list(diags = diags))
+    misc <- append(misc, list(diags = diags))
   }
 
   score <- CreateScoreObject(method = "ROSACE",
@@ -379,7 +379,7 @@ RunRosace.AssaySetGrowth <- function(object, savedir, mc.cores = 4, debug = FALS
 
 #' @param name Name of the object to be analyzed
 #' @param type "Assay" or "AssaySet"
-#' @param pos.col For Growth screen, the column name for position in the var.data 
+#' @param pos.col For Growth screen, the column name for position in the var.data
 #' (optional in no_pos mode)
 #' @param ctrl.col For Growth screen, optional for control to have one position index
 #' @param ctrl.name For Growth screen, optional, the name of the control type
@@ -389,7 +389,7 @@ RunRosace.AssaySetGrowth <- function(object, savedir, mc.cores = 4, debug = FALS
 #' @export
 #'
 RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE,
-                             name, type, 
+                             name, type,
                              pos.col, ctrl.col, ctrl.name, ...) {
 
   # Extract Assay
@@ -511,6 +511,16 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
     phi <-  MCMCScoreDf(fit, param.key = "phi",
                         savefile = paste(savedir, "/phi.tsv", sep = ""),
                         output.lfsr = FALSE)
+
+    ##### mapping the phi and sigma to main.score
+    phi <- phi %>%
+      dplyr::mutate(index = 1:nrow(phi)) %>%
+      dplyr::select(.data$index, phi_mean = .data$mean, phi_sd = .data$sd)
+    sigma <- sigma %>% dplyr::select(sigma2_mean = .data$mean, sigma2_sd = .data$sd)
+    df_pos_index <- cbind(phi, sigma)
+    main.score <- cbind(main.score, df_map[, -1])
+    main.score <- main.score %>%
+      dplyr::left_join(df_pos_index, by = c("index" = "index"))
   }
 
   # Create Score Object
@@ -550,7 +560,7 @@ MCMCLfsr <- function(fit, param.key = "beta") {
 #'
 #' @param var.names character vector of variant names
 #' @param pos.label character or numeric vector of true positions
-#' @param ctrl.label vector of whether variant is control 
+#' @param ctrl.label vector of whether variant is control
 #' @param thred integer, threshold for number of variants per position label (index)
 #'
 #' @return data.frame with columns 'variant', 'pos', 'index'
