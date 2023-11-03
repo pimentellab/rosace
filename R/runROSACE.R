@@ -502,17 +502,17 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
 
   # MCMC score
   main.score <- MCMCScoreDf(fit, param.key = "beta",
-                            savefile = paste(savedir, "/scores_", names(object), ".tsv", sep = ""),
+                            savefile = paste(savedir, "/beta.tsv", sep = ""),
                             output.lfsr = TRUE)
   main.score <- cbind(df_map, main.score)
 
-  epsilon <-  MCMCScoreDf(fit, param.key = "epsilon",
-                          savefile = paste(savedir, "/epsilon.tsv", sep = ""),
+  epsilon <-  MCMCScoreDf(fit, param.key = "epsilon2",
+                          savefile = paste(savedir, "/epsilon2.tsv", sep = ""),
                           output.lfsr = FALSE)
 
   if (!is.na(pos.label[1])) {
-    sigma <-  MCMCScoreDf(fit, param.key = "sigma",
-                          savefile = paste(savedir, "/sigma.tsv", sep = ""),
+    sigma <-  MCMCScoreDf(fit, param.key = "sigma2",
+                          savefile = paste(savedir, "/sigma2.tsv", sep = ""),
                           output.lfsr = FALSE)
     phi <-  MCMCScoreDf(fit, param.key = "phi",
                         savefile = paste(savedir, "/phi.tsv", sep = ""),
