@@ -6,21 +6,26 @@
 \alias{OutputScore.Rosace}
 \title{Output Score data frame}
 \usage{
-OutputScore(object, ...)
+OutputScore(object, pos.info = FALSE, sig.test = 0.05, ...)
 
-\method{OutputScore}{Score}(object, ...)
+\method{OutputScore}{Score}(object, pos.info = FALSE, sig.test = 0.05, ...)
 
-\method{OutputScore}{Rosace}(object, name, ...)
+\method{OutputScore}{Rosace}(object, pos.info = FALSE, sig.test = 0.05, name, ...)
 }
 \arguments{
 \item{object}{Either a Rosace object or a Score object}
+
+\item{pos.info}{Boolean, whether to output the position-level score}
+
+\item{sig.test}{Numeric from 0 to 1, threshold for test statistics}
 
 \item{...}{Additional arguments passed to OutputScore}
 
 \item{name}{The targeted name of Score object}
 }
 \value{
-A dataframe of score
+A data frame of variant score.
+If pos.info is TRUE, return a list of data frame (variant and position)
 }
 \description{
 If the object is a Rosace object, output the meta-information

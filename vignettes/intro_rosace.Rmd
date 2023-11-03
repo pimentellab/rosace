@@ -45,7 +45,7 @@ library("rosace")
 
 ## Example
 
-#### Read Count Data
+#### Read count data
 
 To explain how to use `rosace` we provide an example based on the OCT1 drug cytotoxicity screen (https://www.biorxiv.org/content/10.1101/2023.06.06.543963v1.full). 
 
@@ -57,7 +57,7 @@ key <- "1SM73"
 type <- "growth"
 ```
 
-#### Create Rosace Object
+#### Create Rosace object
 
 First, load the count file into the Assay object. 
 Each replicate in the experiment will form an Assay object and will share the same "key" (1SM73).
@@ -114,7 +114,7 @@ rosace <- IntegrateData(object = rosace, key = key)
 GetAssaySetName(rosace)
 ```
 
-#### Naive Method: simple linear regression (optional)
+#### Naive method: simple linear regression (optional)
 
 ```{r}
 rosace <- runSLR(rosace, name = key, type = "AssaySet")
@@ -178,11 +178,11 @@ rosace@assays$`1SM73_1`@norm.var.names <- rosace@assays$`1SM73_1`@norm.var.names
 rosace <- RunRosace(object = rosace,
                     name = "1SM73_1",
                     type = "Assay",
-                    savedir = "../tests/results/stan/assay/", 
-                    pos.col = "position", 
+                    savedir = "../tests/results/stan/assay/",
+                    pos.col = "position",
                     ctrl.col = "type",
                     ctrl.name = "synonymous",
-                    install = FALSE)
+                    install = TRUE)
 
 # running on an AssaySet (all three replicates)
 rosace@assay.sets$`1SM73`@raw.counts <- rosace@assay.sets$`1SM73`@raw.counts[1:100, ]
@@ -193,7 +193,7 @@ rosace <- RunRosace(object = rosace,
                     type = "AssaySet",
                     savedir = "../tests/results/stan/assayset/",
                     pos.col = "position",
-                    ctrl.col = "type", 
+                    ctrl.col = "type",
                     ctrl.name = "synonymous",
                     install = FALSE)
 ```
@@ -205,25 +205,27 @@ names(rosace@scores)
 
 Then extract the scores data, which includes the variant information, functional score (`mean`), standard deviation (`sd`), and the local false sign discovery rate (`lfsr`) associated with the score.
 ```{r}
-scores.data <- OutputScore(rosace, name = "1SM73_ROSACE")
+scores.data <- OutputScore(rosace, pos.info = FALSE, name = "1SM73_ROSACE")
 head(scores.data)
 ```
 The functional score represents the slope of the linear regression applied to normalized counts across time points, which serves as a measure of cell growth. A positive score indicates the mutation has a a gain of function (GOF) effect, while a negative score indicates a loss of function (LOF) effect. The Rosace model learns a distribution of scores and reports the mean for each variant. 
 
 The `lfsr`, or local false sign rate, offers a Bayesian perspective for estimating uncertainty in the sign of the score. For a negative mean score, `lfsr` estimates the probability it could truly be positive, and vice versa. The below section illustrates how to use score and `lfsr` to identify LOF and GOF mutations. 
 
-#### Interpret Rosace results
+## Interpret Rosace Results
 
-To have a more comprehensive understanding and clearer view of the score distribution, we've made available a precomputed object based on the complete OCT1 dataset. This may help you draw parallel to your own data. 
+To have a more comprehensive understanding and clearer view of the score distribution, we've made available a precomputed object based on the complete OCT1 dataset. This may help you draw parallel to your own data. libra
 
 ```{r}
 # obtain the data 
 data("oct1_rosace_scored")
 
 # extract scores 
-scores.data <- OutputScore(oct1_rosace_scored, name = "1SM73_ROSACE")
+scores.data <- OutputScore(oct1_rosace_scored, name = "1SM73_ROSACE", sig.test = 0.05)
 head(scores.data)
 ```
+
+#### Data visualization
 
 First, we can visualize the distribution of scores across mutation types with the `scoreDensity` function.
 ```{r}
@@ -234,28 +236,52 @@ scoreDensity(scores.data,
 ```
 For other visualizations including visualizing position-wise distributions, refer to the *Visualizing functional score results* vignette.
 
+#### Hypothesis testing
 
-A common goal in DMS experiments is to determine which mutations cause a GOF or a LOF. One natural approach is to conduct hypothesis testing to check whether a score is significantly different from 0. To do this, we first order the variants by the absolute value of their score, then rank them by `lfsr` in ascending order. small values of `lfsr` indicate that we can be confident in the sign of the score. A variant with a large positive or negative score and `lfsr` close to 0 is likely a GOF or LOF, respectively.
+A common goal in DMS experiments is to determine which mutations cause a GOF or a LOF. One natural approach is to conduct hypothesis testing to check whether a score is significantly different from 0. `lfsr` stands for local false sign rate, and is defined as the minimum of the density on the left of 0 (`lfsr.pos`) and on the right of 0 (`lfsr.neg`). The `OutputScore` function automatically does a two-sided test based on the `lfsr` with threshold 0.05: if `lfsr.neg` < 0.05/2, we are confident that the mass of the distribution is on the left side of 0 and label the variant "Neg", and vice versa.
 
+For the OCT1 data, positive scores represent loss-of-function and negative scores represent gain-of-function. You can update the label to "LOF", "Neutral", and "GOF" (instead of "Neg", "Neutral", and "Pos") by the following function.
 ```{r}
 scores.data <- scores.data %>%
-  arrange(desc(abs(mean)), lfsr)
-head(scores.data)
-```
-
-You can choose a threshold for `lfsr` to classify mutations above it as neutral, and those below it as either GOF or LOF. The code below labels mutations into GOF, LOF, and neutral based on the score and `lfsr` < 0.05.
-
-```{r}
-scores.data <- scores.data %>%
-  mutate(effect = case_when(
-    mean > 0 & lfsr < 0.05 ~ "GOF",
-    mean < 0 & lfsr < 0.05 ~ "LOF",
-    TRUE ~ "neutral"
+  mutate(label = case_when(
+    label == "Neg" ~ "GOF",
+    label == "Pos" ~ "LOF",
+    label == "Neutral" ~ "Neutral"
   ))
-
-table(scores.data$effect)
 ```
+
 Keep in mind that setting a threshold is a somewhat counter-Bayesian approach. The threshold should be adaptable, depending on the nature of the experiment and distribution of the data. You may be more or less conservative with thresholding based on the context and prior knowledge.
+
+```{r}
+table(scores.data$type, scores.data$label)
+```
+
+In the growth screen, hypothesis testing for negative scores is much harder than that for the positive scores because random dropout of a variant is common, even for the synonymous mutations, especially when the mass of LOF variant score is shifting towards positive (faster growth rate than synonymous). As a result, it is expected to see more false discovery in the "GOF" bin in the OCT1 data. One might adjust the threshold to be more stringent when discovering "Neg" variants, and looser when discovering "Pos" variants. 
+
+#### Rank the variants
+
+Sometimes, we want to select the most "LOF" or "GOF" variants for validation. Our most confident set of variants are those that have a high absolute value of the score and small `lfsr` close to 0. 
+
+For example, the 5 most "LOF" and "GOF" variants in the OCT1 data can be found by the function below.
+
+```{r}
+# LOF
+scores.data %>% arrange(desc(mean), lfsr.pos) %>% head(5)
+# GOF
+scores.data %>% arrange(mean, lfsr.neg) %>% head(5)
+```
+
+#### Position-level estiamte
+
+When running with the position mode (default), Rosace infers position-specific mean estimate ("phi") and position-specific variance estimate ("sigma2"). The hypothesis testing columns can be interpreted the same way as the ones in the variant-specific section.
+
+```{r}
+scores.data.list <- OutputScore(oct1_rosace_scored, pos.info = TRUE, name = "1SM73_ROSACE", sig.test = 0.05)
+scores.var <- scores.data.list$df_variant
+scores.pos <- scores.data.list$df_position
+head(scores.pos)
+```
+
 
 <div style="height: 200px;"></div>
 
