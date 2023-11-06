@@ -27,13 +27,13 @@ of the variants in the data frame as well.
 
 <h3>Usage</h3>
 
-<pre><code class='language-R'>OutputScore(object, ...)
+<pre><code class='language-R'>OutputScore(object, pos.info = FALSE, sig.test = 0.05, ...)
 
 ## S3 method for class 'Score'
-OutputScore(object, ...)
+OutputScore(object, pos.info = FALSE, sig.test = 0.05, ...)
 
 ## S3 method for class 'Rosace'
-OutputScore(object, name, ...)
+OutputScore(object, pos.info = FALSE, sig.test = 0.05, name, ...)
 </code></pre>
 
 
@@ -43,6 +43,14 @@ OutputScore(object, name, ...)
 <tr style="vertical-align: top;"><td><code>object</code></td>
 <td>
 <p>Either a Rosace object or a Score object</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>pos.info</code></td>
+<td>
+<p>Boolean, whether to output the position-level score</p>
+</td></tr>
+<tr style="vertical-align: top;"><td><code>sig.test</code></td>
+<td>
+<p>Numeric from 0 to 1, threshold for test statistics</p>
 </td></tr>
 <tr style="vertical-align: top;"><td><code>...</code></td>
 <td>
@@ -57,7 +65,8 @@ OutputScore(object, name, ...)
 
 <h3>Value</h3>
 
-<p>A dataframe of score
+<p>A data frame of variant score.
+If pos.info is TRUE, return a list of data frame (variant and position)
 </p>
 
 
