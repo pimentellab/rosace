@@ -577,38 +577,28 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, thred = 10) {
     dplyr::arrange(.data$n_pos, .data$pos)
   n_pos$index <- 0
 
-  index <- 1
-  counter_start_i <- 1
+  n_pos <- n_pos[order(n_pos$pos), ] # order by position
+  curr_index <- 1
   counter <- 0
   for (i in 1:nrow(n_pos)) {
-    c <- n_pos$n_pos[i]
+    n_pos$index[i] <- curr_index
+    counter <- counter + n_pos$n_pos[i]
 
-    if (c > thred) {
-      # one pos one index
-      if (counter != 0) {
-        n_pos$index[counter_start_i:(i - 1)] <- index
-        counter <- 0
-      }
-      n_pos$index[i] <- index
-      index <- index + 1
-    } else {
-      # pos group together to form one index
-      if (counter == 0) {
-        counter_start_i = i
-      }
-      counter <- counter + c
-      if (counter > thred) {
-        # release counter
-        n_pos$index[counter_start_i:i] <- index
-        counter <- 0
-        index <- index + 1
-      }
+    if (counter >= thred) {
+      # Reset counter and increment curr_index
+      counter <- 0
+      curr_index <- curr_index + 1
     }
   }
+
   df_map <- df_map %>% dplyr::left_join(n_pos)
 
   if (!is.na(ctrl.label[1])) {
-    curr_idx <- index
+    if (counter == 0) {
+      curr_idx <- curr_index
+    } else {
+      curr_idx <- curr_index + 1
+    }
     df_map$ctrl <- ctrl.label
     df_map <- df_map %>% dplyr::mutate(index = ifelse(.data$ctrl, curr_idx, .data$index))
   } else {
