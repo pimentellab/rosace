@@ -293,15 +293,28 @@ ImputeData.Rosace <- function(object, impute.method, name, key, ...) {
 #' @rdname FilterData
 #' @method FilterData AssayGrowth
 #' @export
-FilterData.AssayGrowth <- function(object, na.rmax = 0.5, ...) {
+FilterData.AssayGrowth <- function(object, na.rmax = 0.5, min.count = 20, ...) {
 
   CheckDots(...)
 
+  # na.rmax remove
   idx <- which(rowSums(is.na(object@counts)) > (ncol(object@counts) * na.rmax))
   if (length(idx) > 0) {
     warning(
       paste("filtering ", length(idx), " variants that have more than ",
-            na.rmax, " missing data", sep = ""),
+            na.rmax, " missing data\n", sep = ""),
+      call. = FALSE, immediate. = TRUE)
+
+    object@counts <- object@counts[-idx, ]
+    object@var.names <- object@var.names[-idx]
+  } 
+
+  # min.count remove
+  idx <- which(rowSums(object@counts, na.rm = TRUE) < min.count)
+  if (length(idx) > 0) {
+    warning(
+      paste("filtering ", length(idx), " variants that have less than ",
+            min.count, " count\n", sep = ""),
       call. = FALSE, immediate. = TRUE)
 
     object@counts <- object@counts[-idx, ]

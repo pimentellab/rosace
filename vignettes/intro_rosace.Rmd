@@ -85,10 +85,10 @@ GetAssayName(rosace)
 
 #### Preprocessing
 
-'CreateAssayObject' calls function 'FilterData' to filter the variants with more than 'na.rmax'% of NAs by default. But we might want to filter more variants later.
+'CreateAssayObject' calls function 'FilterData' to filter the variants with more than 'na.rmax'% of NAs and less than 'min.count' total counts by default. But we might want to filter more variants later.
 
 ```{r}
-rosace <- FilterData(rosace, key = key, na.rmax = 0.5)
+rosace <- FilterData(rosace, key = key, na.rmax = 0.5, min.count = 20)
 ```
 
 Then we will impute the NA data either by K-Nearest Neighbor method or fill the NA with 0. 

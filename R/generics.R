@@ -76,7 +76,7 @@ NormalizeData <- function(object, normalization.method, ...) {
 #' If normalizing by wild-type variants, the wild-type
 #' variant names must be specified using `wt.var.names`
 #'
-#' @param object An object: AssayGrowth (na.rm), or Rosace
+#' @param object An object: AssayGrowth (na.rm, min.count), or Rosace
 #' @param ... Additional arguments to be passed to the filtering method.
 #'
 #' @return An object with filtered count
