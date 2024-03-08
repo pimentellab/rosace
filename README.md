@@ -29,15 +29,20 @@ and install __rosace__ by typing
 devtools::install_github("pimentellab/rosace")
 ```
 
-See the full [Installation Instructions](vignettes/issues_with_installation.Rmd) for further details and alternative installation options.
+If you prefer to use Docker, we also provide a Docker [image](https://hub.docker.com/r/cbmacdo/rosace-docker) for rosace. You can pull the image in the command line with
+```sh
+docker pull cbmacdo/rosace-docker
+```
+
+See the full [Installation Instructions](vignettes/installation_instructions.Rmd) for further details and alternative installation options.
 
 ## Getting started
 
-```{r}
+```{r eval=FALSE}
 library("rosace")
 ```
 
-We recommend starting with the [vignette](vignettes/intro_rosace.Rmd). 
+We recommend starting with the [vignette](https://pimentellab.github.io/rosace/doc/intro_rosace.html). 
 
 ## Further help
 
