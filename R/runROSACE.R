@@ -27,6 +27,7 @@ CheckStanSetup <- function(mc.cores, install.update = TRUE) {
   if (install.update) {
     install_cmdstan(cores = mc.cores, quiet = TRUE)
   }
+  set_cmdstan_path()
   cmdstan_path()
   cmdstan_version()
 }
@@ -573,34 +574,46 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, thred = 10) {
   df_map <- data.frame(variants = var.names, pos = pos.label)
   n_pos <- df_map %>%
     dplyr::group_by(.data$pos) %>%
-    dplyr::summarise(n_pos =  n()) %>%
-    dplyr::arrange(.data$n_pos, .data$pos)
+    dplyr::summarise(n_pos =  n()) 
   n_pos$index <- 0
 
+  # group position into index
   n_pos <- n_pos[order(n_pos$pos), ] # order by position
   curr_index <- 1
   counter <- 0
   for (i in 1:nrow(n_pos)) {
     n_pos$index[i] <- curr_index
     counter <- counter + n_pos$n_pos[i]
-
     if (counter >= thred) {
       # Reset counter and increment curr_index
       counter <- 0
       curr_index <- curr_index + 1
     }
   }
-
+  if (counter < thred) {
+    n_pos$index[n_pos$index == curr_index] <- curr_index - 1
+    counter <- 0
+  }
   df_map <- df_map %>% dplyr::left_join(n_pos)
 
+  # map synonymous mutation index
+  n_syn_group <- max(n_pos$n_pos) - 1
   if (!is.na(ctrl.label[1])) {
-    if (counter == 0) {
-      curr_idx <- curr_index
-    } else {
-      curr_idx <- curr_index + 1
-    }
     df_map$ctrl <- ctrl.label
-    df_map <- df_map %>% dplyr::mutate(index = ifelse(.data$ctrl, curr_idx, .data$index))
+
+    counter <- 0
+    for (i in which(df_map$ctrl)[order(df_map$pos[df_map$ctrl])]) {
+      df_map$index[i] <- curr_index
+      counter <- counter + 1
+      if (counter >= n_syn_group) {
+        counter <- 0
+        curr_index <- curr_index + 1
+      }
+    }
+    if ((counter < thred) && (sum(df_map$ctrl) >= thred)) {
+      df_map$index[df_map$index == curr_index] <- curr_index - 1
+    }
+    # df_map <- df_map %>% dplyr::mutate(index = ifelse(.data$ctrl, curr_idx, .data$index))
   } else {
     df_map$ctrl <- FALSE
   }

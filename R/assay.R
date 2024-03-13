@@ -154,11 +154,12 @@ CreateAssayObject <- function(counts, var.names, key, rep, type, ...) {
 #'
 #' @param na.rmax Maximum ratio of NA values allowed for a variant
 #'  to be included in the assay (AssayGrowth)
+#' @param min.count The minimum number of counts needed for a variant
 #' @return An AssayGrowth object
 #'
 #' @rdname CreateAssayObject
 #'
-CreateAssayGrowthObject <- function(counts, var.names, key, rep, na.rmax = 0.5) {
+CreateAssayGrowthObject <- function(counts, var.names, key, rep, na.rmax = 0.5, min.count = 20) {
   dimnames(counts) <- NULL # no dimension allowed for slot count
 
   # create assay
@@ -172,7 +173,7 @@ CreateAssayGrowthObject <- function(counts, var.names, key, rep, na.rmax = 0.5) 
   )
 
   # filter data
-  assay <- FilterData(object = assay, na.rmax = na.rmax)
+  assay <- FilterData(object = assay, na.rmax = na.rmax, min.count = min.count)
 
   return(assay)
 }
@@ -249,6 +250,7 @@ CreateAssaySetGrowthObject <- function(combined.counts, var.names, reps, key, ra
 #'
 #' @param assay An Assay object
 #' @return An AssaySet object
+#' @export
 #'
 Assay2AssaySet <- function(assay) {
 

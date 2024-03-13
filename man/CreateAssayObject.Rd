@@ -7,7 +7,14 @@
 \usage{
 CreateAssayObject(counts, var.names, key, rep, type, ...)
 
-CreateAssayGrowthObject(counts, var.names, key, rep, na.rmax = 0.5)
+CreateAssayGrowthObject(
+  counts,
+  var.names,
+  key,
+  rep,
+  na.rmax = 0.5,
+  min.count = 20
+)
 }
 \arguments{
 \item{counts}{Unnormalized data such as raw counts}
@@ -24,6 +31,8 @@ CreateAssayGrowthObject(counts, var.names, key, rep, na.rmax = 0.5)
 
 \item{na.rmax}{Maximum ratio of NA values allowed for a variant
 to be included in the assay (AssayGrowth)}
+
+\item{min.count}{The minimum number of counts needed for a variant}
 }
 \value{
 An Assay object

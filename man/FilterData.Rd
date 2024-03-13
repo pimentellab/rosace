@@ -8,16 +8,18 @@
 \usage{
 FilterData(object, ...)
 
-\method{FilterData}{AssayGrowth}(object, na.rmax = 0.5, ...)
+\method{FilterData}{AssayGrowth}(object, na.rmax = 0.5, min.count = 20, ...)
 
 \method{FilterData}{Rosace}(object, name, key, ...)
 }
 \arguments{
-\item{object}{An object: AssayGrowth (na.rm), or Rosace}
+\item{object}{An object: AssayGrowth (na.rm, min.count), or Rosace}
 
 \item{...}{Additional arguments to be passed to the filtering method.}
 
 \item{na.rmax}{The maximum ratio of NA values allowed in a variant}
+
+\item{min.count}{The minimum number of counts needed for a variant}
 
 \item{name}{character string of AssayGrowth name}
 
