@@ -14,11 +14,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## General
-This guide navigates through some quirks and considerations during the installation of the *rosace* and *cmdstanr* packages, particularly those related to compiler configurations on different operating systems. While installations on the latest MacOS and Linux with Ubuntu have been smooth, we've noted a few issues for installing on the Linux CentOS distribution related to C++ configurations. Alternatively, you may want to use a Docker container with the image we provided to bypass those issues.
+This guide navigates through some quirks and considerations during the installation of the `rosace` and `cmdstanr` packages, particularly those related to compiler configurations on different operating systems. While installations on the latest MacOS and Linux with Ubuntu have been smooth, we've noted a few issues for installing on the Linux CentOS distribution related to C++ configurations. Alternatively, you may want to use a Docker container with the image we provided to bypass those issues.
 
 
-## Installing *cmdstanr*
-Before installing *rosace*, you will need to install *cmdstanr* first using the code below.
+## Installing `cmdstanr`
+Before installing `rosace`, you will need to install `cmdstanr` first using the code below.
 ```{r install cmdstanr, eval=FALSE}
 install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
@@ -31,7 +31,7 @@ cmdstan_version()
 ```
 
 
-If you are downloading on a Linux platform and encounter errors, it is likely due to requirements for a C++ complier since *stan* is built in C++. According to [stan-dev](https://github.com/stan-dev/stan/wiki/Coding-Style-and-Idioms#supported-cpp-versions-and-compilers), *stan* is tested on Linux with g++ 5 (a compiler for C++). Ensure that your system is equipped with a gcc version > 5 which includes g++. You can check the current version in the terminal using:
+If you are downloading on a Linux platform and encounter errors, it is likely due to requirements for a C++ complier since `stan` is built in C++. According to [stan-dev](https://github.com/stan-dev/stan/wiki/Coding-Style-and-Idioms#supported-cpp-versions-and-compilers), `stan` is tested on Linux with g++ 5 (a compiler for C++). Ensure that your system is equipped with a gcc version > 5 which includes g++. You can check the current version in the terminal using:
 ```{bash, eval=FALSE}
 gcc --version
 ```
@@ -43,8 +43,8 @@ lsb_release -a
 ```
 
 
-## Installing *impute*
-If you encounter `xx is not available for this version of R`, or `xx is not available for rosace` during the automatic installation, you may try download it manually. For example, the package *impute* is not available on CRAN and can be downloaded using the following: 
+## Installing `impute`
+If you encounter `xx is not available for this version of R`, or `xx is not available for rosace` during the automatic installation, you may try download it manually. For example, the package `impute` is not available on CRAN and can be downloaded using the following: 
 ```{r, eval = FALSE}
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
@@ -54,7 +54,7 @@ BiocManager::install("impute")
 
 
 ## Using Docker
-If you prefer to use a Docker container to run the analysis, we've provided a Docker image for rosace. Please follow the [instructions](https://docs.docker.com/desktop/) to install Docker on your system. Once Docker is installed, you can pull the rosace Docker image with the following command:
+If you prefer to use a Docker container to run the analysis, we've provided a Docker image for `rosace`. Please follow the [instructions](https://docs.docker.com/desktop/) to install Docker on your system. Once Docker is installed, you can pull the rosace Docker image with the following command:
 ```{sh, eval = FALSE}
 docker pull cbmacdo/rosace-docker
 ```
@@ -74,7 +74,7 @@ Once you are in the container, you may invoke R with:
 R
 ```
 
-And start the analysis by loading the *rosace* package:
+And start the analysis by loading the `rosace` package:
 ```{r eval = FALSE}
 library("rosace")
 ```
