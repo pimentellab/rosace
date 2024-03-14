@@ -19,7 +19,7 @@ knitr::opts_chunk$set(tidy = FALSE, cache = FALSE,
 ## Overview
 
 In the introduction, we consider an experiment primarily focusing on single amino acid substitutions, with each variant being a point mutation. `Rosace` can also be used to analyze data with variants containing multiple mutations at various positions. You could either (1) run Rosace without positional information or (2) provide a positional grouping to allow information shared across similar variants. Since the number of variants with multiple mutations at the exact same positions might be small, (2) requires parsing positions and using heuristics to group variants at similar positions together. We demonstrate two clustering methods using the yeast display [BRCA1-RING](https://mavedb.org/#/score-sets/urn:mavedb:00000003-a-1/) data provided by `Enrich2`.
-```{r, eval = FALSE}
+```{r, message = FALSE}
 library(dplyr)
 library("rosace")
 library(readr)
@@ -30,18 +30,19 @@ library(tidyr)
 ## Process BRCA1-RING data
 
 After fetching the data, load it into a dataframe:
-```{r, eval = FALSE}
+```{r, message = FALSE}
 df <- read_csv("../data/urn_mavedb_00000003-a-1_counts.csv")
 df <- df %>% 
   mutate(hgvs_pro = substr(hgvs_pro, 3, nchar(hgvs_pro)),
          hgvs_pro = gsub("\\[|\\]", "", hgvs_pro)) %>%
   separate(hgvs_pro, sep ="[;]", 
            into = c("mut1", "mut2", "mut3", "mut4", "mut5", "mut6", "mut7", "mut8", "mut9", "mut10"))
+df <- subset(df, select = -c(hgvs_splice))
 ```
 
 
 We parse the metadata to assign labels indicating both the nucleotide-level and amino acid-level mutation positions. The amino acid-level positional label will be used for grouping.
-```{r, eval = FALSE}
+```{r}
 # get all the nucleotide-level mutation positions
 nt_pos_mut <- gsub("[A-Za-z]",'.', gsub(".*?(\\d+[A-Za-z])(?=>)|.", "\\1", df$hgvs_nt, perl = TRUE))
 df <- df %>%
@@ -100,7 +101,7 @@ df <- df %>%
 
 
 Next, create a Rosace object and run data imputation, normalization, and normalization. The BRCA1-RING experiment contains 6 replicates. 
-```{r, eval = FALSE}
+```{r, message = FALSE}
 key <- "BRCA1R"
 type <- "growth"
 assay1 <- CreateAssayObject(counts = as.matrix(df %>% select(19:24)),
@@ -145,7 +146,10 @@ Add variant data including hgvs name, aa_pos_mut, wildtype, mutation, and mutati
 ```{r, eval = FALSE}
 rosace@var.data <- rosace@var.data %>% left_join(df[, 2:7], by = c("variants" = "hgvs_nt"))
 head(rosace@var.data)
+```
 
+
+```{r, eval = FALSE}
 rosace@assay.sets$`BRCA1R`@raw.counts <- rosace@assay.sets$`BRCA1R`@raw.counts[1:100, ]
 rosace@assay.sets$`BRCA1R`@combined.counts <- rosace@assay.sets$`BRCA1R`@combined.counts[1:100, ]
 rosace@assay.sets$`BRCA1R`@var.names <- rosace@assay.sets$`BRCA1R`@var.names[1:100]
@@ -162,7 +166,7 @@ rosace <- RunRosace(object = rosace,
 ## Run Rosace with positional information
 
 Running Rosace with positional information requires additional grouping when there are not enough variants at the exact same positions (less than 10). One option is to use unsupurvised clustering on the positions. First, create a position matrix for variants with multiple mutations:
-```{r, eval = FALSE}
+```{r}
 pos.mat <- matrix(unlist(lapply(lapply(strsplit(df$aa_pos_mut, "\\."), as.numeric), function(x){
    c(x,rep(0,10-length(x)))
 })), ncol = 10, byrow = TRUE)
@@ -180,7 +184,7 @@ clust.res <- clust_kmeans$cluster
 ```
 
 
-```{r, eval = FALSE}
+```{r, message = FALSE}
 # group variants using scclust
 install.packages("scclust")
 library("scclust")
@@ -195,7 +199,7 @@ clust.res <- sc_clustering(dist, 10)
 
 
 Label position groups for both single mutations (from original position) and multiple mutations (from clustering assignment) in a column 'pos_group'. 
-```{r, eval = FALSE}
+```{r}
 df <- df %>% 
   mutate(pos_group = paste0("S",aa_pos_mut), .after = 4)
 df[rownames(pos.mat),]$pos_group <- paste0("M", clust.res)
@@ -203,10 +207,13 @@ df[rownames(pos.mat),]$pos_group <- paste0("M", clust.res)
 
 
 Then, run Rosace with the 'pos.col' argument being 'pos_group':
-```{r, eval = FALSE}
+```{r}
 rosace@var.data <- rosace@var.data %>% left_join(df[, 2:8], by = c("variants" = "hgvs_nt"))
 head(rosace@var.data)
+```
 
+
+```{r, eval = FALSE}
 rosace@assay.sets$`BRCA1R`@raw.counts <- rosace@assay.sets$`BRCA1R`@raw.counts[1:100, ]
 rosace@assay.sets$`BRCA1R`@combined.counts <- rosace@assay.sets$`BRCA1R`@combined.counts[1:100, ]
 rosace@assay.sets$`BRCA1R`@var.names <- rosace@assay.sets$`BRCA1R`@var.names[1:100]
@@ -222,7 +229,7 @@ rosace <- RunRosace(object = rosace,
 
 
 Finally, get the variant scores and proceed with downstream analysis.
-```{r}
+```{r, eval = FALSE}
 scores.data.list<- OutputScore(rosace, pos.info = TRUE, name = "BRCA1R_ROSACE1", sig.test = 0.05)
 scores.pos <- scores.data.list$df_position
 ```
