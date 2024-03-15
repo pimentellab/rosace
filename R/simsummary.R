@@ -73,7 +73,7 @@ GenMutLabel <- function(object, Gmut, hclust, save.plot = FALSE, save.dir = NULL
 
     # save plot
     if (save.plot) {
-      grDevices::png(paste(save.dir, "hclust_k", Gmut, ".png", sep = ""),
+      grDevices::png(file.path(save.dir, paste("hclust_k", Gmut, ".png", sep = "")),
         width = 240, height = 160, res = 1200, units = 'mm')
       plot(hclust)
       stats::rect.hclust(hclust, k = Gmut, border = 2:6)
@@ -333,7 +333,7 @@ JSDDist <- function(object) {
   # remove columns with more than 20% missing
   idx_rm <- (colSums(is.na(df_wide)) > 0.2 * nrow(df_wide))
   if (sum(idx_rm) > 0) {
-    warning("removing column", colnames(df_wide)[idx_rm],
+    warning("removing column ", colnames(df_wide)[idx_rm],
       call. = FALSE,  immediate. = TRUE)
     df_wide <- df_wide[, !idx_rm]
   }

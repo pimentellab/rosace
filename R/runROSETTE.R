@@ -80,8 +80,9 @@ GenerateEffect <- function(cfg) {
   expected_effect_list <-
     expected_effect_distribution_list(var_para = cfg[["effect"]][["var.dist"]],
                                       var_shrink_normal = cfg[["effect"]][["var.shrink"]],
-                                      effect_scale = Nround/cfg[["effect"]][["rounds"]],
+                                      effect_scale = 1,
                                       null_group = cfg[["effect"]][["null.var.group"]])
+  # effect_scale = Nround/cfg[["effect"]][["rounds"]]
 
   # generate expected effect
   expected_result <- generate_expected_effect(expected_effect_list = expected_effect_list,
@@ -555,7 +556,8 @@ output_rosace <- function(effects_list, counts_list, Nrep, Nround, save.dir) {
     idx_end <- (Nround + 1) * i
     assay <- CreateAssayObject(counts = as.matrix(counts_list$sequencing[idx_start:idx_end]),
                                var.names = rownames(counts_list$sequencing),
-                               key = "simulation", rep = i, type = "growth")
+                               key = "simulation", rep = i, type = "growth", 
+                               na.rmax = 1, min.count = 0) # don't filter variants
     if (i == 1) {
       rosace <- CreateRosaceObject(object = assay)
     } else {

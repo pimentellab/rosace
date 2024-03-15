@@ -289,6 +289,7 @@ ImputeData.Rosace <- function(object, impute.method, name, key, ...) {
 }
 
 #' @param na.rmax The maximum ratio of NA values allowed in a variant
+#' @param min.count The minimum number of counts needed for a variant
 #'
 #' @rdname FilterData
 #' @method FilterData AssayGrowth

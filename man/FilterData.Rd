@@ -19,6 +19,8 @@ FilterData(object, ...)
 
 \item{na.rmax}{The maximum ratio of NA values allowed in a variant}
 
+\item{min.count}{The minimum number of counts needed for a variant}
+
 \item{name}{character string of AssayGrowth name}
 
 \item{key}{key of AssayGrowth}
