@@ -118,11 +118,14 @@ clust.res <- clust_kmeans$cluster
 ```
 
 
-```{r, message = FALSE}
+```{r, eval = FALSE, message = FALSE}
 # group variants using scclust
 install.packages("scclust")
-library("scclust")
+```
 
+
+```{r, message = FALSE}
+library("scclust")
 dist <- distances(data.frame(pos.mat, idx = rownames(pos.mat)),
                   id_variable = "idx",
                   dist_variables = paste0("X", seq(1, 10)))
