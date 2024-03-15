@@ -12,7 +12,8 @@ RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    scclust
 Config/testthat/edition: 3
 Imports: 
     cmdstanr,
@@ -40,3 +41,4 @@ VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
 LazyData: true
+LazyDataCompression:xz

@@ -35,3 +35,13 @@ NULL
 #' @format A rosace object with three assays (replicates), one assayset, and one score.  
 #' @keywords datasets
 "oct1_rosace_scored"
+
+#' BRCA1 RING phage screen: variant info and cell count dataframe
+#' 
+#' @name BRCA1R.data
+#' @usage data(BRCA1R)
+#'
+#' @format A dataframe with processed variant information and cell count across 6 time points 
+#' and 6 replicates   
+#' @keywords datasets
+"BRCA1R.data"

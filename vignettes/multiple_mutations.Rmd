@@ -18,7 +18,7 @@ knitr::opts_chunk$set(tidy = FALSE, cache = FALSE,
 
 ## Overview
 
-In the introduction, we consider an experiment primarily focusing on single amino acid substitutions, with each variant being a point mutation. `Rosace` can also be used to analyze data with variants containing multiple mutations at various positions. You can either (1) run Rosace without positional information or (2) provide a positional grouping to allow information to be shared across similar variants. Since the number of variants with multiple mutations at the exact same positions might be small, (2) requires using heuristics to group variants at similar positions together. We demonstrate two clustering methods using the [BRCA1](https://mavedb.org/#/score-sets/urn:mavedb:00000003-a-1/) phage display data provided by `Enrich2`.
+In the introduction, we consider an experiment primarily focusing on single amino acid substitutions, with each variant being a point mutation. `Rosace` can also be used to analyze data with variants containing multiple mutations at various positions. You can either (1) run Rosace without positional information or (2) provide a positional grouping to allow information to be shared across similar variants. Since the number of variants with multiple mutations at the exact same positions might be small, (2) requires using heuristics to group variants at similar positions together. We demonstrate two clustering methods using the [BRCA1 RING](https://mavedb.org/#/score-sets/urn:mavedb:00000003-a-1/) phage display data provided by `Enrich2`.
 ```{r, message = FALSE}
 library(dplyr)
 library("rosace")
@@ -27,7 +27,7 @@ library("rosace")
 
 ## Load data
 
-We've processed the BRCA1 data to include nucleotide-level and amino acid-level mutation positions, as well as wildtypes, mutations, and mutation types. The amino acid-level positional label will be used for grouping.
+We've processed the BRCA1 RING data to include nucleotide-level and amino acid-level mutation positions, as well as wildtypes, mutations, and mutation types. The amino acid-level positional label will be used for grouping.
 ```{r}
 data("BRCA1R")
 ```
