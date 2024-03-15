@@ -18,109 +18,43 @@ knitr::opts_chunk$set(tidy = FALSE, cache = FALSE,
 
 ## Overview
 
-In the introduction, we consider an experiment primarily focusing on single amino acid substitutions, with each variant being a point mutation. `Rosace` can also be used to analyze data with variants containing multiple mutations at various positions. You could either (1) run Rosace without positional information or (2) provide a positional grouping to allow information shared across similar variants. Since the number of variants with multiple mutations at the exact same positions might be small, (2) requires parsing positions and using heuristics to group variants at similar positions together. We demonstrate two clustering methods using the yeast display [BRCA1-RING](https://mavedb.org/#/score-sets/urn:mavedb:00000003-a-1/) data provided by `Enrich2`.
+In the introduction, we consider an experiment primarily focusing on single amino acid substitutions, with each variant being a point mutation. `Rosace` can also be used to analyze data with variants containing multiple mutations at various positions. You can either (1) run Rosace without positional information or (2) provide a positional grouping to allow information to be shared across similar variants. Since the number of variants with multiple mutations at the exact same positions might be small, (2) requires using heuristics to group variants at similar positions together. We demonstrate two clustering methods using the [BRCA1](https://mavedb.org/#/score-sets/urn:mavedb:00000003-a-1/) phage display data provided by `Enrich2`.
 ```{r, message = FALSE}
 library(dplyr)
 library("rosace")
-library(readr)
-library(tidyr)
 ```
 
 
-## Process BRCA1-RING data
+## Load data
 
-After fetching the data, load it into a dataframe:
-```{r, message = FALSE}
-df <- read_csv("../data/urn_mavedb_00000003-a-1_counts.csv")
-df <- df %>% 
-  mutate(hgvs_pro = substr(hgvs_pro, 3, nchar(hgvs_pro)),
-         hgvs_pro = gsub("\\[|\\]", "", hgvs_pro)) %>%
-  separate(hgvs_pro, sep ="[;]", 
-           into = c("mut1", "mut2", "mut3", "mut4", "mut5", "mut6", "mut7", "mut8", "mut9", "mut10"))
-df <- subset(df, select = -c(hgvs_splice))
-```
-
-
-We parse the metadata to assign labels indicating both the nucleotide-level and amino acid-level mutation positions. The amino acid-level positional label will be used for grouping.
+We've processed the BRCA1 data to include nucleotide-level and amino acid-level mutation positions, as well as wildtypes, mutations, and mutation types. The amino acid-level positional label will be used for grouping.
 ```{r}
-# get all the nucleotide-level mutation positions
-nt_pos_mut <- gsub("[A-Za-z]",'.', gsub(".*?(\\d+[A-Za-z])(?=>)|.", "\\1", df$hgvs_nt, perl = TRUE))
-df <- df %>%
-  mutate(nt_pos_mut = substr(nt_pos_mut, 1, nchar(nt_pos_mut)-1)) %>%
-  relocate(nt_pos_mut, .after = 2)
-
-# get all the amino acid-level mutation positions from nucleotide positions
-# unique variant positions are identified by this aa_pos_mut
-aa_pos_mut <- sapply(strsplit(df$nt_pos_mut,'\\.'), function(x){
-   paste(unique(ceiling(as.numeric(x)/3) + 1), collapse = ".")
-})
-df <- df %>%
-  mutate(aa_pos_mut = aa_pos_mut) %>%
-  relocate(aa_pos_mut, .after = 3)
-
-# get wildtype, mutation, and mutation type
-# a variant gets labeled as synonymous mutation if all mutations are synonymous
-wildtype <- apply(as.matrix(df[, 6:15]), 1, function(row) {
-    muts <- unique(na.omit(row))
-    
-    wildtypes <- sapply(muts, function(mut) {
-      if(nchar(mut) > 1) {
-        substring(mut, 1, 3)
-      }else if(mut == "=") {
-        "SYN"
-      }else{
-        "WT"
-      }
-    })
-    
-    return(paste(wildtypes, collapse = "."))
-})
-
-mutation <- apply(as.matrix(df[, 6:15]), 1, function(row) {
-  muts <- unique(na.omit(row))
-  
-  mutations <- sapply(muts, function(mut) {
-    if(nchar(mut) > 1) {
-      substring(mut, nchar(mut)-2, nchar(mut))
-    }else if(mut == "=") {
-      "SYN"
-    }else{
-      "WT"
-    }
-  })
-
-  return(paste(mutations, collapse = "."))
-})
-
-df <- df %>% 
-  mutate(mutation = mutation, wildtype = wildtype,
-         type = ifelse(wildtype == "SYN", "synonymous", 
-                       ifelse(!is.na(wildtype), "missense", NA))) %>%
-  relocate(c(wildtype, mutation, type), .after = c(2,3,4))
+data("BRCA1R")
 ```
 
+## Create Rosace object
 
-Next, create a Rosace object and run data imputation, normalization, and normalization. The BRCA1-RING experiment contains 6 replicates. 
-```{r, message = FALSE}
+Next, create a Rosace object and run data imputation, normalization, and normalization. The BRCA1 phage experiment contains 6 replicates. 
+```{r, eval = FALSE, message = FALSE}
 key <- "BRCA1R"
 type <- "growth"
-assay1 <- CreateAssayObject(counts = as.matrix(df %>% select(19:24)),
-                            var.names = df$hgvs_nt,
+assay1 <- CreateAssayObject(counts = as.matrix(BRCA1R.data %>% select(18:23)),
+                            var.names = BRCA1R.data$hgvs_nt,
                             key = key, rep = 1, type = type)
-assay2 <- CreateAssayObject(counts = as.matrix(df %>% select(25:30)),
-                            var.names = df$hgvs_nt,
+assay2 <- CreateAssayObject(counts = as.matrix(BRCA1R.data %>% select(24:29)),
+                            var.names = BRCA1R.data$hgvs_nt,
                             key = key, rep = 2, type = type)
-assay3 <- CreateAssayObject(counts = as.matrix(df %>% select(31:36)),
-                            var.names = df$hgvs_nt,
+assay3 <- CreateAssayObject(counts = as.matrix(BRCA1R.data %>% select(30:35)),
+                            var.names = BRCA1R.data$hgvs_nt,
                             key = key, rep = 3, type = type)
-assay4 <- CreateAssayObject(counts = as.matrix(df %>% select(37:42)),
-                            var.names = df$hgvs_nt,
+assay4 <- CreateAssayObject(counts = as.matrix(BRCA1R.data %>% select(36:41)),
+                            var.names = BRCA1R.data$hgvs_nt,
                             key = key, rep = 4, type = type)
-assay5 <- CreateAssayObject(counts = as.matrix(df %>% select(43:48)),
-                            var.names = df$hgvs_nt,
+assay5 <- CreateAssayObject(counts = as.matrix(BRCA1R.data %>% select(42:47)),
+                            var.names = BRCA1R.data$hgvs_nt,
                             key = key, rep = 5, type = type)
-assay6 <- CreateAssayObject(counts = as.matrix(df %>% select(49:54)),
-                            var.names = df$hgvs_nt,
+assay6 <- CreateAssayObject(counts = as.matrix(BRCA1R.data %>% select(48:53)),
+                            var.names = BRCA1R.data$hgvs_nt,
                             key = key, rep = 6, type = type)
 
 rosace <- CreateRosaceObject(object = assay1)
@@ -144,7 +78,7 @@ rosace <- IntegrateData(object = rosace, key = key)
 
 Add variant data including hgvs name, aa_pos_mut, wildtype, mutation, and mutation type to the Rosace object. Running Rosace without specifying the 'pos.col' argument will compute variant scores without leveraging positional information. For demonstration purposes, only the first 100 variants are used.
 ```{r, eval = FALSE}
-rosace@var.data <- rosace@var.data %>% left_join(df[, 2:7], by = c("variants" = "hgvs_nt"))
+rosace@var.data <- rosace@var.data %>% left_join(BRCA1R.data[, 2:7], by = c("variants" = "hgvs_nt"))
 head(rosace@var.data)
 ```
 
@@ -167,11 +101,11 @@ rosace <- RunRosace(object = rosace,
 
 Running Rosace with positional information requires additional grouping when there are not enough variants at the exact same positions (less than 10). One option is to use unsupurvised clustering on the positions. First, create a position matrix for variants with multiple mutations:
 ```{r}
-pos.mat <- matrix(unlist(lapply(lapply(strsplit(df$aa_pos_mut, "\\."), as.numeric), function(x){
+pos.mat <- matrix(unlist(lapply(lapply(strsplit(BRCA1R.data$aa_pos_mut, "\\."), as.numeric), function(x){
    c(x,rep(0,10-length(x)))
 })), ncol = 10, byrow = TRUE)
 
-rownames(pos.mat) <- seq(1, dim(df)[1])
+rownames(pos.mat) <- seq(1, dim(BRCA1R.data)[1])
 pos.mat <- pos.mat[pos.mat[, 2] != 0,]
 ```
 
@@ -199,16 +133,16 @@ clust.res <- sc_clustering(dist, 10)
 
 
 Label position groups for both single mutations (from original position) and multiple mutations (from clustering assignment) in a column 'pos_group'. 
-```{r}
-df <- df %>% 
+```{r, eval = FALSE}
+BRCA1R.data <- BRCA1R.data %>% 
   mutate(pos_group = paste0("S",aa_pos_mut), .after = 4)
-df[rownames(pos.mat),]$pos_group <- paste0("M", clust.res)
+BRCA1R.data[rownames(pos.mat),]$pos_group <- paste0("M", clust.res)
 ```
 
 
 Then, run Rosace with the 'pos.col' argument being 'pos_group':
-```{r}
-rosace@var.data <- rosace@var.data %>% left_join(df[, 2:8], by = c("variants" = "hgvs_nt"))
+```{r, eval = FALSE}
+rosace@var.data <- rosace@var.data %>% left_join(BRCA1R.data[, 2:8], by = c("variants" = "hgvs_nt"))
 head(rosace@var.data)
 ```
 
