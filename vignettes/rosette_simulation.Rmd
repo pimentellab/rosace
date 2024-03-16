@@ -13,16 +13,18 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 ```{r}
 library("rosace")
 ```
 
-## Description
+## Overview
 
+We developed Rosette for simulating cell count data in growth or binding-based DMS screens. Rosette estimates summary statistics including sequencing count dispersion and variant score distributions from real data. You may use it to infer distributional properties from custom data and generate simulated data with desired noise effect, sequencing depth etc.
 
 ## Example
 
-Again, we are using the oct1 dataset as our example. 
+Again, we use the oct1 dataset as our example. 
 
 ### Read Processed Rosace Object
 ```{r}
@@ -32,6 +34,8 @@ type <- "growth"
 ```
 
 ### Create Naive Score
+
+Rosette will learn the distributional properties of variant scores from score estimates. The score estimates can be naive (e.g. simple linear regression) or more complicated (e.g. `rosace`)
 ```{r}
 oct1_rosace <- runSLR(oct1_rosace, name = "1SM73_2", type = "Assay")
 ```
@@ -49,9 +53,7 @@ rosette <- CreateRosetteObject(object = oct1_rosace,
 
 #### Dispersion
 
-TODO: description
-
-When calling the function "CreateRosetteObject", the dispersion parameters are automatically inferred. 
+Two dispersion parameters, dispersion of the sequencing count and dispersion of the variant library, are calculated from raw count. The former measures how much variability in variant representation there is before and during sequencing, and the later measures how much variability in variant representation there is before the cell selection. The dispersion parameters are automatically inferred when "CreateRosetteObject" is called. 
 ```{r}
 rosette@disp
 rosette@disp.start
@@ -59,8 +61,7 @@ rosette@disp.start
 
 #### Mutant Group Label
 
-TODO: description
-
+To account for similar functional effects among mutants (substitutions, insertions, or deletions of amino acids), we categorized them into mutant groups using hierarchical clustering. 
 ```{r}
 hclust <- HclustMutant(rosette, save.plot = FALSE)
 rosette <- GenMutLabel(rosette, hclust = hclust, Gmut = 4, save.plot = FALSE)
@@ -68,8 +69,7 @@ rosette <- GenMutLabel(rosette, hclust = hclust, Gmut = 4, save.plot = FALSE)
 
 #### Variant Group Label
 
-TODO: description
-
+Within each mutant group, the variants can have either neutral, loss of function, or gain of function effect. We therefore categorize the variants into three groups and estimate the score distribution parameters for each group. 
 ```{r}
 PlotScoreHist(rosette, var.group = FALSE, mut.group = FALSE)
 rosette <- GenVarLabel(rosette, Gvar = 2)
@@ -78,17 +78,17 @@ PlotScoreHist(rosette, var.group = TRUE, mut.group = TRUE)
 
 #### Weight of variant group within mutant group
 
-TODO: description
-
+Then, infer the distribution for the number of variants within each variant group and mutant group at each position. 'pos.missing' specifies the percentage of missing variants allowed at each position.
 ```{r}
 rosette <- PMVCountDist(rosette, pos.missing = 0.2)
 ```
 
 ### Create config for simulation
 
+Next, create a config file with other user defined properties for simulation, such as the number of rounds and replicates, experimental type (growth or binding), wild-type effect (binding) or doubling rate (growth), sequencing depth, shrinkage factor for library or sequencing dispersion, and simulation mode (clean or with replication error).
 ```{r eval=FALSE}
 cfg <- CreateConfig(rosette,
-                    n.sim = 2, save.sim = "tests/results/sim", type.sim = "growth",
+                    n.sim = 2, save.sim = "../tests/results/sim", type.sim = "growth",
                     n.rep = 3, n.round = 3,
                     null.var.group = 'var1', wt.effect = -2,
                     seq.shrink = 1.2, seq.depth = 100,
@@ -99,6 +99,7 @@ cfg <- CreateConfig(rosette,
 
 ### Run simulation
 
+Finally, run the simulation with desired output format. 
 ```{r eval=FALSE}
 runRosette(config = cfg, save.tsv = TRUE, save.rosace = TRUE, save.enrich2 = TRUE)
 ```
