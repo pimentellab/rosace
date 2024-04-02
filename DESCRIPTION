@@ -12,8 +12,7 @@ RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0),
-    scclust
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
     cmdstanr,

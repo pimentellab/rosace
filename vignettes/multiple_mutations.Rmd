@@ -124,7 +124,7 @@ install.packages("scclust")
 ```
 
 
-```{r, message = FALSE}
+```{r, eval = FALSE, message = FALSE}
 library("scclust")
 dist <- distances(data.frame(pos.mat, idx = rownames(pos.mat)),
                   id_variable = "idx",
