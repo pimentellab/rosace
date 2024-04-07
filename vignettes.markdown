@@ -15,12 +15,12 @@ The following vignettes will guide you through how to use Rosace and interpret t
 - [Visualizing Rosace scores]({{ site.baseurl }}/doc/visualizing_rosace_scores.html):
     - Heatmap, violin plot, and density plot
 
-[Multiple mutations]({{ site.baseurl }}/doc/multiple_mutations.html):
-- Dealing with variants containing multiple mutations
+- [Multiple mutations]({{ site.baseurl }}/doc/multiple_mutations.html):
+    - Dealing with variants containing multiple mutations
 
-[More installation instructions]({{ site.baseurl }}/doc/installation_instructions.html):
-- Install cmdstanr
-- Using Docker
+- [More installation instructions]({{ site.baseurl }}/doc/installation_instructions.html):
+    - Install cmdstanr
+    - Using Docker
 
-[Introductions to Rosette]({{ site.baseurl }}/doc/rosette_simulation.html):
-- Simulating count data using Rosette
+- [Introductions to Rosette]({{ site.baseurl }}/doc/rosette_simulation.html):
+    - Simulating count data using Rosette
