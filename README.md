@@ -56,4 +56,4 @@ You may submit a bug report here on GitHub as an issue or you could send an emai
 
 ## Citing rosace
 
-Please cite the following publication if you use __rosace__: xxxxxx
+Please cite the following publication if you use __rosace__: Rao, J., Xin, R., Macdonald, C. et al. Rosace: a robust deep mutational scanning analysis framework employing position and mean-variance shrinkage. Genome Biol 25, 138 (2024). https://doi.org/10.1186/s13059-024-03279-7
