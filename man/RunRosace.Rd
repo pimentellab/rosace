@@ -17,6 +17,7 @@ RunRosace(object, savedir, mc.cores, debug, install, ...)
   install = TRUE,
   pos.label,
   ctrl.label,
+  stop.label,
   ...
 )
 
@@ -28,6 +29,7 @@ RunRosace(object, savedir, mc.cores, debug, install, ...)
   install = TRUE,
   pos.label,
   ctrl.label,
+  stop.label,
   ...
 )
 
@@ -42,6 +44,8 @@ RunRosace(object, savedir, mc.cores, debug, install, ...)
   pos.col,
   ctrl.col,
   ctrl.name,
+  stop.col,
+  stop.name,
   ...
 )
 }
@@ -63,6 +67,8 @@ There's a chance for Github download error if running multiple instances on a se
 
 \item{ctrl.label}{vector of whether variant is in the control group (NA if none provided)}
 
+\item{stop.label}{vector of whether variant is in the stop/nonsense group (NA if none provided)}
+
 \item{name}{Name of the object to be analyzed}
 
 \item{type}{"Assay" or "AssaySet"}
@@ -70,9 +76,13 @@ There's a chance for Github download error if running multiple instances on a se
 \item{pos.col}{For Growth screen, the column name for position in the var.data
 (optional in no_pos mode)}
 
-\item{ctrl.col}{For Growth screen, optional for control to have one position index}
+\item{ctrl.col}{For Growth screen, optional for control to have separate position indexes}
 
 \item{ctrl.name}{For Growth screen, optional, the name of the control type}
+
+\item{stop.col}{For Growth screen, optional for stop/nonsense mutations to have separate position indexes}
+
+\item{stop.name}{For Growth screen, optional, the name of the stop/nonsense type}
 }
 \value{
 A object with Rosace result (Score object) if debug = FALSE

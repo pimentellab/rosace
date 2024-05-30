@@ -8,9 +8,25 @@
 \usage{
 GenRosaceInput(object, save.input, ...)
 
-\method{GenRosaceInput}{AssayGrowth}(object, save.input, pos.label, ctrl.label, thred = 10, ...)
+\method{GenRosaceInput}{AssayGrowth}(
+  object,
+  save.input,
+  pos.label,
+  ctrl.label,
+  stop.label,
+  thred = 10,
+  ...
+)
 
-\method{GenRosaceInput}{AssaySetGrowth}(object, save.input, pos.label, ctrl.label, thred = 10, ...)
+\method{GenRosaceInput}{AssaySetGrowth}(
+  object,
+  save.input,
+  pos.label,
+  ctrl.label,
+  stop.label,
+  thred = 10,
+  ...
+)
 }
 \arguments{
 \item{object}{Assay or AssaySet}
@@ -22,6 +38,8 @@ GenRosaceInput(object, save.input, ...)
 \item{pos.label}{vector of true position of variants}
 
 \item{ctrl.label}{vector of whether variant is control}
+
+\item{stop.label}{vector of whether variant is stop/nonsense}
 
 \item{thred}{integer, threshold for number of variants per position label (index)
 Passed to function "varPosIndexMap"}

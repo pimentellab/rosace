@@ -4,7 +4,7 @@
 \alias{varPosIndexMap}
 \title{Map each variant to its position label (index)}
 \usage{
-varPosIndexMap(var.names, pos.label, ctrl.label, thred = 10)
+varPosIndexMap(var.names, pos.label, ctrl.label, stop.label, thred = 10)
 }
 \arguments{
 \item{var.names}{character vector of variant names}
@@ -12,6 +12,8 @@ varPosIndexMap(var.names, pos.label, ctrl.label, thred = 10)
 \item{pos.label}{character or numeric vector of true positions}
 
 \item{ctrl.label}{vector of whether variant is control}
+
+\item{stop.label}{vector of whether variant is stop/nonsense}
 
 \item{thred}{integer, threshold for number of variants per position label (index)}
 }

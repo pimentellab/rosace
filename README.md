@@ -4,6 +4,12 @@
   <img src="man/figures/rosace_logo.png" width="150">
 </p>
 
+## Update
+
+v1.1: May 30, 2024
+- Added options to take out nonsense/stop mutations from position-level estimates
+- Fixed a bug in position-level lfsr computation 
+
 ## Overview
 
 __rosace__ is an R package for analyzing growth-based deep mutational scanning screen data.  
