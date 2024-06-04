@@ -24,10 +24,16 @@ NULL
 #'
 CheckStanSetup <- function(mc.cores, install.update = TRUE) {
   check_cmdstan_toolchain(fix = TRUE, quiet = TRUE)
+  
+  # Install CmdStan under working directory
+  cmdstan_path <- file.path(getwd(), "cmdstan")
+  dir.create(cmdstan_path, showWarnings = FALSE)
+
   if (install.update) {
-    install_cmdstan(cores = mc.cores, quiet = TRUE)
+    install_cmdstan(dir = cmdstan_path, cores = mc.cores, quiet = TRUE)
   }
-  set_cmdstan_path()
+
+  set_cmdstan_path(path = cmdstan_path)
   cmdstan_path()
   cmdstan_version()
 }
