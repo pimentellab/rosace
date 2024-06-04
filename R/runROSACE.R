@@ -164,13 +164,14 @@ MCMCScoreDf <- function(fit, param.key, param.post, savefile, output.lfsr = TRUE
 
 #' @param pos.label vector of true position of variants
 #' @param ctrl.label vector of whether variant is control
+#' @param stop.label vector of whether variant is stop/nonsense
 #' @param thred integer, threshold for number of variants per position label (index)
 #' Passed to function "varPosIndexMap"
 #‘
 #' @rdname GenRosaceInput
 #' @method GenRosaceInput AssayGrowth
 #' @export
-GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label, thred = 10, ...) {
+GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label, stop.label, thred = 10, ...) {
   CheckDots(...)
 
   # generate variants - mean count group mapping
@@ -186,6 +187,7 @@ GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label
       varPosIndexMap(var.names = object@norm.var.names,
                      pos.label = pos.label,
                      ctrl.label = ctrl.label,
+                     stop.label = stop.label,
                      thred = thred)
     if (max(df_map$index) != length(unique(df_map$index))) {
       stop("Error when generating position index.")
@@ -224,12 +226,13 @@ GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label
 
 #' @param pos.label vector of true position of variants
 #' @param ctrl.label vector of whether variant is control
+#' @param stop.label vector of whether variant is stop/nonsense
 #' @param thred integer, threshold for number of variants per position label (index)
 #' Passed to function "varPosIndexMap"
 #' @rdname GenRosaceInput
 #' @method GenRosaceInput AssaySetGrowth
 #' @export
-GenRosaceInput.AssaySetGrowth <- function(object, save.input, pos.label, ctrl.label, thred = 10, ...) {
+GenRosaceInput.AssaySetGrowth <- function(object, save.input, pos.label, ctrl.label, stop.label, thred = 10, ...) {
   CheckDots(...)
 
   # generate variants - mean count group mapping
@@ -247,6 +250,7 @@ GenRosaceInput.AssaySetGrowth <- function(object, save.input, pos.label, ctrl.la
       varPosIndexMap(var.names = object@var.names,
                     pos.label = pos.label,
                     ctrl.label = ctrl.label,
+                    stop.label = stop.label,
                     thred = thred)
 
     if (max(df_map$index) != length(unique(df_map$index))) {
@@ -344,19 +348,21 @@ MCMCCreateScore.AssaySet <- function(object, main.score,
 
 #' @param pos.label vector of true position of variants
 #' @param ctrl.label vector of whether variant is in the control group (NA if none provided)
+#' @param stop.label vector of whether variant is in the stop/nonsense group (NA if none provided)
 #'
 #' @rdname RunRosace
 #' @method RunRosace AssayGrowth
 #' @export
 #'
 RunRosace.AssayGrowth <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE,
-                                  pos.label, ctrl.label, ...) {
+                                  pos.label, ctrl.label, stop.label, ...) {
   CheckDots(..., args = "thred")
   return(helperRunRosaceGrowth(object = object,
                                savedir = savedir,
                                mc.cores = mc.cores,
                                pos.label = pos.label,
                                ctrl.label = ctrl.label,
+                               stop.label = stop.label,
                                debug = debug,
                                install = install,
                                ...))
@@ -364,19 +370,20 @@ RunRosace.AssayGrowth <- function(object, savedir, mc.cores = 4, debug = FALSE, 
 
 #' @param pos.label vector of true position of variants
 #' @param ctrl.label vector of whether variant is in the control group (NA if none provided)
-#'
+#' @param stop.label vector of whether variant is in the stop/nonsense group (NA if none provided)
 #' @rdname RunRosace
 #' @method RunRosace AssaySetGrowth
 #' @export
 #'
 RunRosace.AssaySetGrowth <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE,
-                                     pos.label, ctrl.label, ...) {
+                                     pos.label, ctrl.label, stop.label, ...) {
   CheckDots(..., args = "thred")
   return(helperRunRosaceGrowth(object = object,
                                savedir = savedir,
                                mc.cores = mc.cores,
                                pos.label = pos.label,
                                ctrl.label = ctrl.label,
+                               stop.label = stop.label,
                                debug = debug,
                                install = install,
                                ...))
@@ -386,8 +393,10 @@ RunRosace.AssaySetGrowth <- function(object, savedir, mc.cores = 4, debug = FALS
 #' @param type "Assay" or "AssaySet"
 #' @param pos.col For Growth screen, the column name for position in the var.data
 #' (optional in no_pos mode)
-#' @param ctrl.col For Growth screen, optional for control to have one position index
+#' @param ctrl.col For Growth screen, optional for control to have separate position indexes
 #' @param ctrl.name For Growth screen, optional, the name of the control type
+#' @param stop.col For Growth screen, optional for stop/nonsense mutations to have separate position indexes
+#' @param stop.name For Growth screen, optional, the name of the stop/nonsense type
 #'
 #' @rdname RunRosace
 #' @method RunRosace Rosace
@@ -395,7 +404,7 @@ RunRosace.AssaySetGrowth <- function(object, savedir, mc.cores = 4, debug = FALS
 #'
 RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE,
                              name, type,
-                             pos.col, ctrl.col, ctrl.name, ...) {
+                             pos.col, ctrl.col, ctrl.name, stop.col, stop.name, ...) {
 
   # Extract Assay
   if (type == "Assay") {
@@ -433,8 +442,21 @@ RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, insta
       }
     }
 
+    # stop.col optional
+    if (missing(stop.col) || missing(stop.name)) {
+      warnings("stop column or name not provided.")
+      stop.label <- NA
+    } else {
+      if (type == "Assay") {
+        stop.label <- ExtractVarAssay(object, name, norm = TRUE)[[stop.col]] == stop.name
+      } else {
+        stop.label <- ExtractVarAssaySet(object, name)[[stop.col]] == stop.name
+      }
+    }
+
+
     # run Rosace
-    # AssayGrowth/AssaySetGrowth: pos.label (could be NA), ctrl.label (could be NA), thred (optional)
+    # AssayGrowth/AssaySetGrowth: pos.label (could be NA), ctrl.label (could be NA), stop.label (could be NA), thred (optional)
     score <- RunRosace(object = sub_object,
               savedir = savedir,
               mc.cores = mc.cores,
@@ -442,6 +464,7 @@ RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, insta
               install = install,
               pos.label = pos.label,
               ctrl.label = ctrl.label,
+              stop.label = stop.label,
               ...)
   } else {
     stop("THIS IS VERY WRONG. Check ExtractAssay and ExtractAssaySet.")
@@ -465,7 +488,7 @@ RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, insta
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # ...: thred (optional)
-helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.label,
+helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.label, stop.label,
                                   debug = FALSE, install = TRUE, ...) {
   # create directory if not exists
   if (!dir.exists(savedir)) {
@@ -490,6 +513,7 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
                                        ".RData", sep = ""),
                                pos.label = pos.label,
                                ctrl.label = ctrl.label,
+                               stop.label = stop.label,
                                ...)
   input <- input.list$input
   df_map <- input.list$df_map
@@ -565,11 +589,12 @@ MCMCLfsr <- function(fit, param.key = "beta") {
 #' @param var.names character vector of variant names
 #' @param pos.label character or numeric vector of true positions
 #' @param ctrl.label vector of whether variant is control
+#' @param stop.label vector of whether variant is stop/nonsense
 #' @param thred integer, threshold for number of variants per position label (index)
 #'
 #' @return data.frame with columns 'variant', 'pos', 'index'
 #'
-varPosIndexMap <- function(var.names, pos.label, ctrl.label, thred = 10) {
+varPosIndexMap <- function(var.names, pos.label, ctrl.label, stop.label, thred = 10) {
 
   df_map <- data.frame(variants = var.names, pos = pos.label)
   n_pos <- df_map %>%
@@ -612,10 +637,35 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, thred = 10) {
     }
     if ((counter < thred) && (sum(df_map$ctrl) >= thred)) {
       df_map$index[df_map$index == curr_index] <- curr_index - 1
+    } else {
+      curr_index <- curr_index + 1
     }
     # df_map <- df_map %>% dplyr::mutate(index = ifelse(.data$ctrl, curr_idx, .data$index))
   } else {
     df_map$ctrl <- FALSE
+  }
+
+  # map stop/nonsense mutation index
+  n_syn_group <- max(n_pos$n_pos) - 1
+  if (!is.na(stop.label[1])) {
+    df_map$stop <- stop.label
+
+    counter <- 0
+    for (i in which(df_map$stop)[order(df_map$pos[df_map$stop])]) {
+      df_map$index[i] <- curr_index
+      counter <- counter + 1
+      if (counter >= n_syn_group) {
+        counter <- 0
+        curr_index <- curr_index + 1
+      }
+    }
+    if ((counter < thred) && (sum(df_map$stop) >= thred)) {
+      df_map$index[df_map$index == curr_index] <- curr_index - 1
+    } else {
+      curr_index <- curr_index + 1
+    }
+  } else {
+    df_map$stop <- FALSE
   }
 
   return(df_map)

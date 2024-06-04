@@ -4,6 +4,16 @@
   <img src="man/figures/rosace_logo.png" width="150">
 </p>
 
+## Update
+
+v1.1: May 30, 2024
+- Added options to take out nonsense/stop mutations from position-level estimates
+- Fixed a bug in position-level lfsr computation 
+- The latest version 1.1 is uploaded at docker [image](https://hub.docker.com/r/roseraosh/rosace)
+```sh
+docker pull roseraosh/rosace:latest
+```
+
 ## Overview
 
 __rosace__ is an R package for analyzing growth-based deep mutational scanning screen data.  
@@ -33,6 +43,7 @@ If you prefer to use Docker, we also provide a Docker [image](https://hub.docker
 ```sh
 docker pull cbmacdo/rosace-docker
 ```
+More detailed instructions on docker image is provided in this [repo](https://github.com/odcambc/rosace-docker). 
 
 See the full [Installation Instructions](vignettes/installation_instructions.Rmd) for further details and alternative installation options.
 
@@ -50,4 +61,4 @@ You may submit a bug report here on GitHub as an issue or you could send an emai
 
 ## Citing rosace
 
-Please cite the following publication if you use __rosace__: xxxxxx
+Please cite the following publication if you use __rosace__: Rao, J., Xin, R., Macdonald, C. et al. Rosace: a robust deep mutational scanning analysis framework employing position and mean-variance shrinkage. Genome Biol 25, 138 (2024). https://doi.org/10.1186/s13059-024-03279-7

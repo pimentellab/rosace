@@ -121,18 +121,18 @@ OutputScore.Score <- function(object, pos.info = FALSE, sig.test = 0.05, ...) {
     if (pos.info == TRUE) {
       df_pos <- cbind(df,
                       object@optional.score %>%
-                        dplyr::select(.data$ctrl, .data$pos,
+                        dplyr::select(.data$ctrl, .data$stop, .data$pos,
                                       .data$phi_mean, .data$phi_sd,
                                       .data$sigma2_mean, .data$sigma2_sd))
       df_pos <- df_pos %>%
-        dplyr::filter(.data$ctrl == FALSE) %>%
+        dplyr::filter(.data$ctrl == FALSE, .data$stop == FALSE) %>%
         dplyr::select(.data$pos, .data$phi_mean, .data$phi_sd, .data$sigma2_mean, .data$sigma2_sd) %>%
         unique() %>%
         arrange(.data$pos)
 
       df_pos <- df_pos %>% dplyr::rowwise() %>%
-        mutate(lfsr.neg = stats::pnorm(0, mean = .data$phi_mean, sd = .data$sigma2_mean, lower.tail = FALSE),
-               lfsr.pos = stats::pnorm(0, mean = .data$phi_mean, sd = .data$sigma2_mean, lower.tail = TRUE),
+        mutate(lfsr.neg = stats::pnorm(0, mean = .data$phi_mean, sd = .data$phi_sd, lower.tail = FALSE),
+               lfsr.pos = stats::pnorm(0, mean = .data$phi_mean, sd = .data$phi_sd, lower.tail = TRUE),
                lfsr = min(.data$lfsr.neg, .data$lfsr.pos),
                test.neg = (.data$lfsr.neg <= sig.test/2),
                test.pos = (.data$lfsr.pos <= sig.test/2),

@@ -98,7 +98,7 @@ rosace <- ImputeData(rosace, key = key, impute.method = "knn", na.rmax = 0.5)
 # rosace <- ImputeData(rosace, key = key, impute.method = "zero")
 ```
 
-With a complete count matrix in the Assay object, we will normalize the data by either a list of wild-type variants or by the total count at the time point.
+With a complete count matrix in the Assay object, we will normalize the data by either a list of wild-type variants or by the total count at the time point. We recommend using the wild-type normalization because it will align the wild-type variant score to be 0 for hypothesis testing.
 
 ```{r}
 rosace <- NormalizeData(rosace, key = key,
@@ -198,6 +198,21 @@ rosace <- RunRosace(object = rosace,
                     install = FALSE)
 ```
 
+Update v1.1: Users can now group the nonsense/stop mutations as an additional option. The OCT1 data doesn't include nonsense mutations, so we show an example of grouping deletion mutations.
+```{r message=FALSE}
+# running on an AssaySet (all three replicates)
+# rosace <- RunRosace(object = rosace,
+#                     name = "1SM73",
+#                     type = "AssaySet",
+#                     savedir = "../tests/results/stan/assayset_stop/",
+#                     pos.col = "position",
+#                     ctrl.col = "type",
+#                     ctrl.name = "synonymous",
+#                     stop.col = "type",
+#                     stop.name = "deletion",
+#                     install = FALSE)
+```
+
 The Rosace results can be retrieved using the `OutputScore` function. First, check the name of your Rosace run:
 ```{r}
 names(rosace@scores)
@@ -274,6 +289,8 @@ scores.data %>% arrange(mean, lfsr.neg) %>% head(5)
 #### Position-level estiamte
 
 When running with the position mode (default), Rosace infers position-specific mean estimate ("phi") and position-specific variance estimate ("sigma2"). The hypothesis testing columns can be interpreted the same way as the ones in the variant-specific section.
+
+If the user includes synonymous and/or missense mutations when running Rosace, it would exclude those variants from the position-level estimates.
 
 ```{r}
 scores.data.list <- OutputScore(oct1_rosace_scored, pos.info = TRUE, name = "1SM73_ROSACE", sig.test = 0.05)

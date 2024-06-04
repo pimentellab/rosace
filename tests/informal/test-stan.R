@@ -31,9 +31,13 @@ rosace <- RunRosace(object = rosace,
                     pos.col = "position",
                     ctrl.col = "type",
                     ctrl.name = "synonymous",
+                    stop.col = "type",
+                    stop.name = "deletion",
                     install = FALSE)
 head(OutputScore.Score(rosace@scores[[3]]))
 head(OutputScore(rosace, name = "1SM73_1_ROSACE"))
+
+OutputScore(rosace, name = "1SM73_1_ROSACE", pos.info = TRUE)
 
 # non-position model
 rosace <- RunRosace(object = rosace,
@@ -56,6 +60,10 @@ rosace <- RunRosace(object = rosace,
                     install = FALSE)
 head(OutputScore.Score(rosace@scores[[4]]))
 head(OutputScore(rosace, name = "1SM73_ROSACE"))
+
+oct1_rosace_scored <- rosace
+save(oct1_rosace_scored, file = "oct1_rosace_scored.rda", compress = "xz")
+
 # non-position model
 rosace <- RunRosace(object = rosace,
                     name = "1SM73",
