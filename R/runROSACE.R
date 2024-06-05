@@ -22,20 +22,39 @@ NULL
 #'
 #' @export
 #'
-CheckStanSetup <- function(mc.cores, install.update = TRUE) {
+CheckStanSetup <- function(mc.cores, install = TRUE) {
   check_cmdstan_toolchain(fix = TRUE, quiet = TRUE)
-  
-  # Install CmdStan under working directory
-  cmdstan_path <- file.path(getwd(), "cmdstan")
-  dir.create(cmdstan_path, showWarnings = FALSE)
 
-  if (install.update) {
-    install_cmdstan(dir = cmdstan_path, cores = mc.cores, quiet = TRUE)
+  CMDSTAN_VER <- NULL # Always use the latest version 
+
+  if (is.logical(install)) {
+    if (install) {
+      install_cmdstan(
+        dir = NULL,
+        cores = mc.cores,
+        quiet = TRUE,
+        version = CMDSTAN_VER
+      )
+      set_cmdstan_path()
+    }
+  } else if (is.character(install)){
+    install_cmdstan(
+      dir = install,
+      cores = mc.cores,
+      quiet = TRUE,
+      version = CMDSTAN_VER
+    )
+    cmdstan_path <- file.path(
+      install,
+      paste("cmdstan", CMDSTAN_VER, sep = "-")
+    )
+    set_cmdstan_path(path = cmdstan_path)
+  } else {
+    stop("RunRosace: 'install' should be logical or character.")
   }
 
-  set_cmdstan_path(path = cmdstan_path)
-  cmdstan_path()
-  cmdstan_version()
+  print(cmdstan_path())
+  print(cmdstan_version())
 }
 
 #' Compile Stan model
@@ -502,7 +521,7 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
   }
 
   # stan check
-  CheckStanSetup(mc.cores = mc.cores, install.update = install)
+  CheckStanSetup(mc.cores = mc.cores, install = install)
 
   # model
   if (is.na(pos.label[1])) {
