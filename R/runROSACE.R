@@ -22,14 +22,41 @@ NULL
 #'
 #' @export
 #'
-CheckStanSetup <- function(mc.cores, install.update = TRUE) {
+CheckStanSetup <- function(mc.cores, install = TRUE, cmdstan_ver = NULL) {
   check_cmdstan_toolchain(fix = TRUE, quiet = TRUE)
-  if (install.update) {
-    install_cmdstan(cores = mc.cores, quiet = TRUE)
+
+  if (is.null(cmdstan_ver)) {
+    cmdstan_ver <- "2.35.0"
   }
-  set_cmdstan_path()
-  cmdstan_path()
-  cmdstan_version()
+
+  if (is.logical(install)) {
+    if (install) {
+      install_cmdstan(
+        dir = NULL,
+        cores = mc.cores,
+        quiet = TRUE,
+        version = cmdstan_ver
+      )
+      set_cmdstan_path()
+    }
+  } else if (is.character(install)){
+    install_cmdstan(
+      dir = install,
+      cores = mc.cores,
+      quiet = TRUE,
+      version = cmdstan_ver
+    )
+    cmdstan_path <- file.path(
+      install,
+      paste("cmdstan", cmdstan_ver, sep = "-")
+    )
+    set_cmdstan_path(path = cmdstan_path)
+  } else {
+    stop("RunRosace: 'install' should be logical or character.")
+  }
+
+  print(cmdstan_path())
+  print(cmdstan_version())
 }
 
 #' Compile Stan model
@@ -354,7 +381,8 @@ MCMCCreateScore.AssaySet <- function(object, main.score,
 #' @method RunRosace AssayGrowth
 #' @export
 #'
-RunRosace.AssayGrowth <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE,
+RunRosace.AssayGrowth <- function(object, savedir, 
+                                  mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = NULL,
                                   pos.label, ctrl.label, stop.label, ...) {
   CheckDots(..., args = "thred")
   return(helperRunRosaceGrowth(object = object,
@@ -365,6 +393,7 @@ RunRosace.AssayGrowth <- function(object, savedir, mc.cores = 4, debug = FALSE, 
                                stop.label = stop.label,
                                debug = debug,
                                install = install,
+                               cmdstan_ver = cmdstan_ver,
                                ...))
 }
 
@@ -375,7 +404,8 @@ RunRosace.AssayGrowth <- function(object, savedir, mc.cores = 4, debug = FALSE, 
 #' @method RunRosace AssaySetGrowth
 #' @export
 #'
-RunRosace.AssaySetGrowth <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE,
+RunRosace.AssaySetGrowth <- function(object, savedir, 
+                                     mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = NULL,
                                      pos.label, ctrl.label, stop.label, ...) {
   CheckDots(..., args = "thred")
   return(helperRunRosaceGrowth(object = object,
@@ -386,6 +416,7 @@ RunRosace.AssaySetGrowth <- function(object, savedir, mc.cores = 4, debug = FALS
                                stop.label = stop.label,
                                debug = debug,
                                install = install,
+                               cmdstan_ver = cmdstan_ver,
                                ...))
 }
 
@@ -402,7 +433,7 @@ RunRosace.AssaySetGrowth <- function(object, savedir, mc.cores = 4, debug = FALS
 #' @method RunRosace Rosace
 #' @export
 #'
-RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE,
+RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = NULL,
                              name, type,
                              pos.col, ctrl.col, ctrl.name, stop.col, stop.name, ...) {
 
@@ -465,6 +496,7 @@ RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, insta
               pos.label = pos.label,
               ctrl.label = ctrl.label,
               stop.label = stop.label,
+              cmdstan_ver = cmdstan_ver,
               ...)
   } else {
     stop("THIS IS VERY WRONG. Check ExtractAssay and ExtractAssaySet.")
@@ -489,14 +521,18 @@ RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, insta
 
 # ...: thred (optional)
 helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.label, stop.label,
-                                  debug = FALSE, install = TRUE, ...) {
+                                  debug = FALSE, install = TRUE, cmdstan_ver = NULL, ...) {
   # create directory if not exists
   if (!dir.exists(savedir)) {
     dir.create(savedir, recursive = TRUE)
   }
 
   # stan check
-  CheckStanSetup(mc.cores = mc.cores, install.update = install)
+  CheckStanSetup(
+    mc.cores = mc.cores, 
+    install = install, 
+    cmdstan_ver = cmdstan_ver
+  )
 
   # model
   if (is.na(pos.label[1])) {
