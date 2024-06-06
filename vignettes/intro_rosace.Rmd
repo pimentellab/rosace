@@ -182,7 +182,8 @@ rosace <- RunRosace(object = rosace,
                     pos.col = "position",
                     ctrl.col = "type",
                     ctrl.name = "synonymous",
-                    install = TRUE)
+                    install = TRUE,
+                    cmdstan_ver = "3.25.0")
 
 # running on an AssaySet (all three replicates)
 rosace@assay.sets$`1SM73`@raw.counts <- rosace@assay.sets$`1SM73`@raw.counts[1:100, ]

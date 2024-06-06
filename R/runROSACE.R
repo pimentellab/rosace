@@ -35,7 +35,11 @@ CheckStanSetup <- function(mc.cores, install = TRUE, cmdstan_ver = "2.35.0") {
         quiet = TRUE,
         version = cmdstan_ver
       )
-      set_cmdstan_path()
+    cmdstan_path <- file.path(
+      Sys.getenv("HOME"), ".cmdstan", 
+      paste("cmdstan", cmdstan_ver, sep = "-")
+    )
+    set_cmdstan_path(path = cmdstan_path)
     }
   } else if (is.character(install)){
     install_cmdstan(
