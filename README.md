@@ -10,6 +10,7 @@ v1.1: May 30, 2024
 - Added options to take out nonsense/stop mutations from position-level estimates
 - Fixed a bug in position-level lfsr computation 
 - The latest version 1.1 is uploaded at docker [image](https://hub.docker.com/r/roseraosh/rosace)
+- cmdstanr is updated and the csv reading format is different from the past. We recommend the user to use cmdstan version 3.25.0 (default install built in the package) and cmdstanr version >= 0.8.0 to avoid the trouble. 
 ```sh
 docker pull roseraosh/rosace:latest
 ```

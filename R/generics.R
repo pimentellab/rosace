@@ -196,8 +196,10 @@ MCMCCreateScore <- function(object, main.score, param.post, diags) {
 #' @param savedir directory to save the output
 #' @param mc.cores integer, number of cores to use for parallel computing
 #' @param debug logical, if TRUE, return a list of cmdstanfit and Score object.
-#' @param install logical, if TRUE, install or update cmdstanr
+#' @param install if TRUE, install cmdstan to the default path; if FALSE, not update cmdstan
+#' if a string, download to the path specified in string
 #' There's a chance for Github download error if running multiple instances on a server.
+#' @param cmdstan_ver string, cmdstan version to download
 #' @param ... Additional arguments to be passed to the run method.
 #'
 #' @return A object with Rosace result (Score object) if debug = FALSE
@@ -205,7 +207,7 @@ MCMCCreateScore <- function(object, main.score, param.post, diags) {
 #' @rdname RunRosace
 #' @export
 #'
-RunRosace <- function(object, savedir, mc.cores, debug, install, ...) {
+RunRosace <- function(object, savedir, mc.cores, debug, install, cmdstan_ver, ...) {
   UseMethod(generic = 'RunRosace', object = object)
 }
 

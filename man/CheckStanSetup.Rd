@@ -4,12 +4,15 @@
 \alias{CheckStanSetup}
 \title{Check Stan Setup}
 \usage{
-CheckStanSetup(mc.cores, install.update = TRUE)
+CheckStanSetup(mc.cores, install = TRUE, cmdstan_ver = "2.35.0")
 }
 \arguments{
 \item{mc.cores}{Number of cores to use for parallel builds}
 
-\item{install.update}{whether to update CmdStan}
+\item{install}{if TRUE, install cmdstan to the default path; if FALSE, not update cmdstan
+if a string, download to the path specified in string}
+
+\item{cmdstan_ver}{string, cmdstan version to download}
 }
 \value{
 None

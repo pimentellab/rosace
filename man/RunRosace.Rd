@@ -7,7 +7,7 @@
 \alias{RunRosace.Rosace}
 \title{Run Rosace on an Assay/AssaySet object}
 \usage{
-RunRosace(object, savedir, mc.cores, debug, install, ...)
+RunRosace(object, savedir, mc.cores, debug, install, cmdstan_ver, ...)
 
 \method{RunRosace}{AssayGrowth}(
   object,
@@ -15,6 +15,7 @@ RunRosace(object, savedir, mc.cores, debug, install, ...)
   mc.cores = 4,
   debug = FALSE,
   install = TRUE,
+  cmdstan_ver = "2.35.0",
   pos.label,
   ctrl.label,
   stop.label,
@@ -27,6 +28,7 @@ RunRosace(object, savedir, mc.cores, debug, install, ...)
   mc.cores = 4,
   debug = FALSE,
   install = TRUE,
+  cmdstan_ver = "2.35.0",
   pos.label,
   ctrl.label,
   stop.label,
@@ -39,6 +41,7 @@ RunRosace(object, savedir, mc.cores, debug, install, ...)
   mc.cores = 4,
   debug = FALSE,
   install = TRUE,
+  cmdstan_ver = "2.35.0",
   name,
   type,
   pos.col,
@@ -58,8 +61,11 @@ RunRosace(object, savedir, mc.cores, debug, install, ...)
 
 \item{debug}{logical, if TRUE, return a list of cmdstanfit and Score object.}
 
-\item{install}{logical, if TRUE, install or update cmdstanr
+\item{install}{if TRUE, install cmdstan to the default path; if FALSE, not update cmdstan
+if a string, download to the path specified in string
 There's a chance for Github download error if running multiple instances on a server.}
+
+\item{cmdstan_ver}{string, cmdstan version to download}
 
 \item{...}{Additional arguments to be passed to the run method.}
 

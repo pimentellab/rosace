@@ -16,18 +16,16 @@ NULL
 #' Check Stan Setup
 #'
 #' @param mc.cores Number of cores to use for parallel builds
-#' @param install.update whether to update CmdStan
+#' @param install if TRUE, install cmdstan to the default path; if FALSE, not update cmdstan
+#' if a string, download to the path specified in string
+#' @param cmdstan_ver string, cmdstan version to download
 #'
 #' @return None
 #'
 #' @export
 #'
-CheckStanSetup <- function(mc.cores, install = TRUE, cmdstan_ver = NULL) {
+CheckStanSetup <- function(mc.cores, install = TRUE, cmdstan_ver = "2.35.0") {
   check_cmdstan_toolchain(fix = TRUE, quiet = TRUE)
-
-  if (is.null(cmdstan_ver)) {
-    cmdstan_ver <- "2.35.0"
-  }
 
   if (is.logical(install)) {
     if (install) {
@@ -382,7 +380,7 @@ MCMCCreateScore.AssaySet <- function(object, main.score,
 #' @export
 #'
 RunRosace.AssayGrowth <- function(object, savedir, 
-                                  mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = NULL,
+                                  mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = "2.35.0",
                                   pos.label, ctrl.label, stop.label, ...) {
   CheckDots(..., args = "thred")
   return(helperRunRosaceGrowth(object = object,
@@ -405,7 +403,7 @@ RunRosace.AssayGrowth <- function(object, savedir,
 #' @export
 #'
 RunRosace.AssaySetGrowth <- function(object, savedir, 
-                                     mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = NULL,
+                                     mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = "2.35.0",
                                      pos.label, ctrl.label, stop.label, ...) {
   CheckDots(..., args = "thred")
   return(helperRunRosaceGrowth(object = object,
@@ -433,7 +431,7 @@ RunRosace.AssaySetGrowth <- function(object, savedir,
 #' @method RunRosace Rosace
 #' @export
 #'
-RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = NULL,
+RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = "2.35.0",
                              name, type,
                              pos.col, ctrl.col, ctrl.name, stop.col, stop.name, ...) {
 
@@ -521,7 +519,7 @@ RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, insta
 
 # ...: thred (optional)
 helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.label, stop.label,
-                                  debug = FALSE, install = TRUE, cmdstan_ver = NULL, ...) {
+                                  debug = FALSE, install = TRUE, cmdstan_ver = "2.35.0", ...) {
   # create directory if not exists
   if (!dir.exists(savedir)) {
     dir.create(savedir, recursive = TRUE)
