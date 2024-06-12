@@ -400,15 +400,15 @@ the following:</p>
 provided a Docker image for <code>rosace</code>. Please follow the <a href="https://docs.docker.com/desktop/">instructions</a> to install
 Docker on your system. Once Docker is installed, you can pull the rosace
 Docker image with the following command:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">docker</span> pull cbmacdo/rosace-docker</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">docker</span> pull roseraosh/rosace:latest</span></code></pre></div>
 <p>To run the Docker container and access its shell environment, use a
 command similar to the following, which creates a container and enters
 an interactive shell environment</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">--platform</span> linux/amd64 <span class="at">-it</span> <span class="at">--entrypoint</span> bash <span class="at">--name</span> rosacecontainer cbmacdo/rosace-docker</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">--platform</span> linux/amd64 <span class="at">-it</span> <span class="at">--entrypoint</span> bash <span class="at">--name</span> rosacecontainer roseraosh/rosace</span></code></pre></div>
 <p>You may also add an argument to mount your local directories or data
 files to the container. Replace <code>/PATH/TO/DATADIR</code> with the
 actual path to your data directory on your local system:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">--platform</span> linux/amd64 <span class="at">-it</span> <span class="at">-v</span> /PATH/TO/DATADIR:/home/rosace/data <span class="at">--entrypoint</span> bash <span class="at">--name</span> rosacecontainer cbmacdo/rosace-docker</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">--platform</span> linux/amd64 <span class="at">-it</span> <span class="at">-v</span> /PATH/TO/DATADIR:/home/rosace/data <span class="at">--entrypoint</span> bash <span class="at">--name</span> rosacecontainer roseraosh/rosace</span></code></pre></div>
 <p>Once you are in the container, you may invoke R with:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">R</span></span></code></pre></div>
 <p>And start the analysis by loading the <code>rosace</code>

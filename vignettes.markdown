@@ -22,5 +22,5 @@ The following vignettes will guide you through how to use Rosace and interpret t
     - Install cmdstanr
     - Using Docker
 
-- [Introductions to Rosette]({{ site.baseurl }}/doc/rosette_simulation.html):
+- [Introduction to Rosette]({{ site.baseurl }}/doc/rosette_simulation.html):
     - Simulating count data using Rosette
