@@ -56,17 +56,17 @@ BiocManager::install("impute")
 ## Using Docker
 If you prefer to use a Docker container to run the analysis, we've provided a Docker image for `rosace`. Please follow the [instructions](https://docs.docker.com/desktop/) to install Docker on your system. Once Docker is installed, you can pull the rosace Docker image with the following command:
 ```{sh, eval = FALSE}
-docker pull cbmacdo/rosace-docker
+docker pull roseraosh/rosace:latest
 ```
 
 To run the Docker container and access its shell environment, use a command similar to the following, which creates a container and enters an interactive shell environment
 ```{sh, eval = FALSE}
-docker run --rm --platform linux/amd64 -it --entrypoint bash --name rosacecontainer cbmacdo/rosace-docker
+docker run --rm --platform linux/amd64 -it --entrypoint bash --name rosacecontainer roseraosh/rosace
 ```
 
 You may also add an argument to mount your local directories or data files to the container. Replace `/PATH/TO/DATADIR` with the actual path to your data directory on your local system:
 ```{sh, eval = FALSE}
-docker run --rm --platform linux/amd64 -it -v /PATH/TO/DATADIR:/home/rosace/data --entrypoint bash --name rosacecontainer cbmacdo/rosace-docker
+docker run --rm --platform linux/amd64 -it -v /PATH/TO/DATADIR:/home/rosace/data --entrypoint bash --name rosacecontainer roseraosh/rosace
 ```
 
 Once you are in the container, you may invoke R with:
