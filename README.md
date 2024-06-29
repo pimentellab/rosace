@@ -54,7 +54,7 @@ See the full [Installation Instructions](vignettes/installation_instructions.Rmd
 library("rosace")
 ```
 
-We recommend starting with the [vignette](https://pimentellab.github.io/rosace/doc/intro_rosace.html). A vignette for the simulation module [Rosette](vignettes/rosette_simulation.Rmd) is also avaliable.
+We recommend starting with the [vignette](https://pimentellab.com/rosace/vignettes/). A vignette for the simulation module [Rosette](https://pimentellab.com/rosace/doc/rosette_simulation.html) is also avaliable.
 
 ## Further help
 
