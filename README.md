@@ -30,6 +30,8 @@ library(cmdstanr)
 install_cmdstan(cores = 4)
 ```
 
+__rosace__ also uses the library __inpute__. Refer to the Bioconductor [site](https://bioconductor.org/packages/release/bioc/html/impute.html) for installation instructions.
+
 To install __rosace__ start [R](https://www.r-project.org) and first install devtools by typing
 ```{r eval=FALSE}
 install.packages("devtools")
