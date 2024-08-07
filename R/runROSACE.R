@@ -383,7 +383,7 @@ MCMCCreateScore.AssaySet <- function(object, main.score,
 #' @method RunRosace AssayGrowth
 #' @export
 #'
-RunRosace.AssayGrowth <- function(object, savedir, 
+RunRosace.AssayGrowth <- function(object, savedir,
                                   mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = "2.35.0",
                                   pos.label, ctrl.label, stop.label, ...) {
   CheckDots(..., args = "thred")
@@ -406,7 +406,7 @@ RunRosace.AssayGrowth <- function(object, savedir,
 #' @method RunRosace AssaySetGrowth
 #' @export
 #'
-RunRosace.AssaySetGrowth <- function(object, savedir, 
+RunRosace.AssaySetGrowth <- function(object, savedir,
                                      mc.cores = 4, debug = FALSE, install = TRUE, cmdstan_ver = "2.35.0",
                                      pos.label, ctrl.label, stop.label, ...) {
   CheckDots(..., args = "thred")
@@ -531,8 +531,8 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
 
   # stan check
   CheckStanSetup(
-    mc.cores = mc.cores, 
-    install = install, 
+    mc.cores = mc.cores,
+    install = install,
     cmdstan_ver = cmdstan_ver
   )
 
@@ -637,7 +637,7 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, stop.label, thred =
   df_map <- data.frame(variants = var.names, pos = pos.label)
   n_pos <- df_map %>%
     dplyr::group_by(.data$pos) %>%
-    dplyr::summarise(n_pos =  n()) 
+    dplyr::summarise(n_pos =  n())
   n_pos$index <- 0
 
   # group position into index
@@ -661,7 +661,7 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, stop.label, thred =
 
   # map synonymous mutation index
   n_syn_group <- max(n_pos$n_pos) - 1
-  if (!is.na(ctrl.label[1])) {
+  if (!is.na(ctrl.label[1]) && sum(ctrl.label[1]) > 0) {
     df_map$ctrl <- ctrl.label
 
     counter <- 0
@@ -685,7 +685,7 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, stop.label, thred =
 
   # map stop/nonsense mutation index
   n_syn_group <- max(n_pos$n_pos) - 1
-  if (!is.na(stop.label[1])) {
+  if (!is.na(stop.label[1]) && sum(stop.label[1]) > 0) {
     df_map$stop <- stop.label
 
     counter <- 0
