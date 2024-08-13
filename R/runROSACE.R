@@ -490,6 +490,7 @@ RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, insta
 
     # run Rosace
     # AssayGrowth/AssaySetGrowth: pos.label (could be NA), ctrl.label (could be NA), stop.label (could be NA), thred (optional)
+
     score <- RunRosace(object = sub_object,
               savedir = savedir,
               mc.cores = mc.cores,
@@ -558,6 +559,8 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
 
   # MCMC sampling
   # WARNING: FIT is a temporary environment!!!
+
+
   fit <- MCMCRunStan(input, mod, seed = 100, refresh = 10)
 
   # MCMC diagnostics
@@ -661,7 +664,7 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, stop.label, thred =
 
   # map synonymous mutation index
   n_syn_group <- max(n_pos$n_pos) - 1
-  if (!is.na(ctrl.label[1]) && sum(ctrl.label[1]) > 0) {
+  if (!is.na(ctrl.label[1]) && sum(ctrl.label) > 0) {
     df_map$ctrl <- ctrl.label
 
     counter <- 0
@@ -685,7 +688,7 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, stop.label, thred =
 
   # map stop/nonsense mutation index
   n_syn_group <- max(n_pos$n_pos) - 1
-  if (!is.na(stop.label[1]) && sum(stop.label[1]) > 0) {
+  if (!is.na(stop.label[1]) && sum(stop.label) > 0) {
     df_map$stop <- stop.label
 
     counter <- 0
