@@ -210,7 +210,9 @@ GenRosaceInput.AssayGrowth <- function(object, save.input, pos.label, ctrl.label
   vMAPm <- ceiling(rank(rowSums(raw.counts, na.rm = TRUE))/25)
 
 
-  if (!is.na(pos.label[1])) {
+  use_pos_model <- length(pos.label) > 0 && !all(is.na(pos.label))
+
+  if (use_pos_model) {
     # generate variants - position mapping
     df_map <-
       varPosIndexMap(var.names = object@norm.var.names,
@@ -273,7 +275,9 @@ GenRosaceInput.AssaySetGrowth <- function(object, save.input, pos.label, ctrl.la
   counts <- impute.output$counts
   rounds <- impute.output$rounds
 
-  if (!is.na(pos.label[1])) {
+  use_pos_model <- length(pos.label) > 0 && !all(is.na(pos.label))
+
+  if (use_pos_model) {
     # generate variants - position mapping
     df_map <-
       varPosIndexMap(var.names = object@var.names,
@@ -473,6 +477,7 @@ RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, insta
       } else {
         ctrl.label <- ExtractVarAssaySet(object, name)[[ctrl.col]] == ctrl.name
       }
+      ctrl.label[is.na(ctrl.label)] <- FALSE
     }
 
     # stop.col optional
@@ -485,6 +490,7 @@ RunRosace.Rosace <- function(object, savedir, mc.cores = 4, debug = FALSE, insta
       } else {
         stop.label <- ExtractVarAssaySet(object, name)[[stop.col]] == stop.name
       }
+      stop.label[is.na(stop.label)] <- FALSE
     }
 
 
@@ -537,8 +543,11 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
     cmdstan_ver = cmdstan_ver
   )
 
+  # position model is available when at least one position label is non-missing
+  use_pos_model <- length(pos.label) > 0 && !all(is.na(pos.label))
+
   # model
-  if (is.na(pos.label[1])) {
+  if (!use_pos_model) {
     mod.file <- WriteStanModel(type = "growth_nopos")
   } else {
     mod.file <- WriteStanModel(type = "growth_pos")
@@ -576,7 +585,7 @@ helperRunRosaceGrowth <- function(object, savedir, mc.cores, pos.label, ctrl.lab
                           savefile = paste(savedir, "/epsilon2.tsv", sep = ""),
                           output.lfsr = FALSE)
 
-  if (!is.na(pos.label[1])) {
+  if (use_pos_model) {
     sigma <-  MCMCScoreDf(fit, param.key = "sigma2",
                           savefile = paste(savedir, "/sigma2.tsv", sep = ""),
                           output.lfsr = FALSE)
@@ -664,7 +673,8 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, stop.label, thred =
 
   # map synonymous mutation index
   n_syn_group <- max(n_pos$n_pos) - 1
-  if (!is.na(ctrl.label[1]) && sum(ctrl.label) > 0) {
+  ctrl.label <- ifelse(is.na(ctrl.label), FALSE, ctrl.label)
+  if (any(ctrl.label)) {
     df_map$ctrl <- ctrl.label
 
     counter <- 0
@@ -688,7 +698,8 @@ varPosIndexMap <- function(var.names, pos.label, ctrl.label, stop.label, thred =
 
   # map stop/nonsense mutation index
   n_syn_group <- max(n_pos$n_pos) - 1
-  if (!is.na(stop.label[1]) && sum(stop.label) > 0) {
+  stop.label <- ifelse(is.na(stop.label), FALSE, stop.label)
+  if (any(stop.label)) {
     df_map$stop <- stop.label
 
     counter <- 0
@@ -800,4 +811,3 @@ imputeAssaysCountKNN <- function(counts, rounds) {
   return(list(counts = mat_impute,
               rounds = rounds))
 }
-
