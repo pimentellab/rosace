@@ -1,20 +1,20 @@
 Package: rosace
 Title: statistical inference of growth-based deep mutational scanning (DMS) screens
 Version: 1.1.0
-Authors@R: 
-    person("Jingyou", "Rao", , "roserao@ucla.edu", role = c("aut", "cre"),
+Authors@R:
+    person("Jingyou", "Rao", email= "roserao@ucla.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4331-8786"))
 Description: A robust deep mutational scanning analysis framework employing position and mean-variance shrinkage.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Imports: 
+Imports:
     cmdstanr (>= 0.8.0),
     colorspace,
     compositions,
@@ -35,9 +35,10 @@ Imports:
     stringr,
     tidyr,
     utils
-Remotes: bioc::release/impute
+Remotes: bioc::impute,
+    github::stan-dev/cmdstanr
 VignetteBuilder: knitr
-Depends: 
+Depends:
     R (>= 2.10)
 LazyData: true
 LazyDataCompression:xz

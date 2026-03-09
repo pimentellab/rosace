@@ -1,5 +1,9 @@
 # rosace
 
+  <!-- badges: start -->
+  [![R-CMD-check](https://github.com/odcambc/rosace/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/odcambc/rosace/actions/workflows/R-CMD-check.yaml)
+  <!-- badges: end -->
+
 <p align="left">
   <img src="man/figures/rosace_logo.png" width="150">
 </p>
@@ -8,7 +12,7 @@
 
 v1.1: May 30, 2024
 - Added options to take out nonsense/stop mutations from position-level estimates
-- Fixed a bug in position-level lfsr computation 
+- Fixed a bug in position-level lfsr computation
 - The latest version 1.1 is uploaded at docker [image](https://hub.docker.com/r/roseraosh/rosace)
 - cmdstanr is updated and the csv reading format is different from the past. We recommend the user to use cmdstan version 2.35.0 (default install built in the package) and cmdstanr version >= 0.8.0 to avoid the trouble. However, if there is a link error (see issue #6) with cmdstan 2.35.0 on linux system, downgrade the version to 2.33.1 by specifying option "cmdstan_ver" in "runRosace" function.
 ```sh
@@ -17,11 +21,11 @@ docker pull roseraosh/rosace:latest
 
 ## Overview
 
-__rosace__ is an R package for analyzing growth-based deep mutational scanning screen data.  
+__rosace__ is an R package for analyzing growth-based deep mutational scanning screen data.
 
 ## Installation
 
-__rosace__ uses [cmdstanr](https://mc-stan.org/cmdstanr/) to run inference. Please ensure that __cmdstanr__ is properly installed before installing __rosace__. Below is a concise installation command; for complete details, please refer to the official website. 
+__rosace__ uses [cmdstanr](https://mc-stan.org/cmdstanr/) to run inference. Please ensure that __cmdstanr__ is properly installed before installing __rosace__. Below is a concise installation command; for complete details, please refer to the official website.
 ```{r eval=FALSE}
 install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
@@ -46,7 +50,7 @@ If you prefer to use Docker, we also provide a Docker [image](https://hub.docker
 ```sh
 docker pull cbmacdo/rosace-docker
 ```
-More detailed instructions on docker image is provided in this [repo](https://github.com/odcambc/rosace-docker). 
+More detailed instructions on docker image is provided in this [repo](https://github.com/odcambc/rosace-docker).
 
 See the full [Installation Instructions](vignettes/installation_instructions.Rmd) for further details and alternative installation options.
 
